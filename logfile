@@ -1,0 +1,4 @@
+2019-01-15 13:54:19.165 CET [19056] LOG:  en écoute sur IPv6, adresse « :: », port 5432
+2019-01-15 13:54:19.166 CET [19056] LOG:  en écoute sur IPv4, adresse « 0.0.0.0 », port 5432
+2019-01-15 13:54:19.256 CET [19056] LOG:  redirection des traces vers le processus de récupération des traces
+2019-01-15 13:54:19.256 CET [19056] ASTUCE :  Les prochaines traces apparaîtront dans le répertoire « log ».
