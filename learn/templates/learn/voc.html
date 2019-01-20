@@ -1,0 +1,19 @@
+{% extends "learn/base.html" %}
+
+{% block content %}
+
+{% load static %}
+
+<div>You are learning {{ lang }}</div>
+<hr>
+
+<form action="/learn/voc/" method="post">
+    {% csrf_token %}
+    Themes
+    <input type="hidden" name="lang" value="{{ lang }}" method="post">
+    <input class="big-button" type="submit" value="Vocabulary" method="post">
+</form>
+
+
+
+{% endblock %}

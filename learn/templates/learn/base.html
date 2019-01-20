@@ -1,0 +1,22 @@
+{% load static %}
+
+<HTML>
+    <head>
+        <title>Listen and learn</title>
+        <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+        <header>
+            <div>Vowell Vocabulary Quizz Stats Parameters Logout</div>
+        </header>
+        <hr>
+        <content>
+
+            {% block content%}{% endblock %}
+
+        </content>
+        <hr>
+        <footer>Designed by OC</footer>
+        <script></script>
+    </body>

@@ -1,0 +1,48 @@
+{% load static %}
+
+<HTML>
+    <head>
+        <title>Listen and learn</title>
+        <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+        <header>Welcome to SpeakWell</header>
+        <hr>
+        <content>
+            <!--
+            <form action="/learn/" method="get">
+                {% csrf_token %}
+                <input class="big-button" type="submit" value="START" method="get">
+            </form>
+
+            <form action="/learn/" method="get">
+                {% csrf_token %}
+                <input class="big-button" type="submit" value="LOGIN" method="get">
+            </form>
+            !-->
+
+            <div>Choose your language</div>
+            <hr>
+            <form action="/learn/home/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="lang" value="jp" method="post">
+                <input class="big-button" type="submit" value="Japanese" method="post">
+            </form>
+            <form action="/learn/home/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="lang" value="fr" method="post">
+                <input class="big-button" type="submit" value="French" method="post">
+            </form>
+            <form action="/learn/home/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="lang" value="ru" method="post">
+                <input class="big-button" type="submit" value="Russian" method="post">
+            </form>
+
+
+        </content>
+        <hr>
+        <footer>Designed by OC</footer>
+        <script></script>
+    </body>

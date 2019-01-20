@@ -8,16 +8,17 @@ class Routetesting(TestCase):
     def test_index(self):
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
-    def test_start(self):
-        response = self.client.get(reverse('start'))
+    def test_home(self):
+        response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
+"""
     def test_login(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
 
 
 class TestRegistration(TestCase):
-    """Test registration."""
+    #Test registration
     def create_user(self):
         user = ""
         self.user = user
@@ -32,4 +33,6 @@ class TestRegistration(TestCase):
         # assert new_user[4] == self.sub.Grade.upper()
 
 class TestLogin(TestCase):
-    """Test Login in, but might be redundant!"""
+    #Test Login in, but might be redundant!
+
+"""
