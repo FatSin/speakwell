@@ -10,6 +10,7 @@ urlpatterns = [
 
     url(r'^$', views.index, name='index'),
     url(r'^home/', views.home, name='home'),
+    url(r'^voc/', views.voc, name='voc'),
     ]
 
 if settings.DEBUG:
