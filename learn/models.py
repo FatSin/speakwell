@@ -16,10 +16,10 @@ class User(models.Model):
 
 class Word(models.Model):
     NameEng = models.CharField(max_length=20, unique=True)
-    Phonetics = models.CharField(max_length=20)
     IsEnabled = models.BooleanField(max_length=20, default=True)
 
 class Wordjp(models.Model):
+    Phonetics = models.CharField(max_length=20)
     NameHira = models.CharField(max_length=20)
     NameKata = models.CharField(max_length=20)
     NameKanji = models.CharField(max_length=20)
@@ -35,6 +35,14 @@ class Progression(models.Model):
     WordsLearnt = ArrayField(models.PositiveSmallIntegerField())
     Exelearnt = ArrayField(models.PositiveSmallIntegerField())
     FunFacts = ArrayField(models.PositiveSmallIntegerField())
+
+
+class Theme(models.Model):
+    NameEng = models.CharField(max_length=20)
+    NameFr = models.CharField(max_length=20)
+    #Word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    words = models.ManyToManyField(Word, related_name='themes', blank=True)
+
 
 
 
