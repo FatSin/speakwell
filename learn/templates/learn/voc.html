@@ -9,8 +9,17 @@
 
 <h2>Themes</h2>
 
+<!--
+{% for theme in themes_list %}
+    <p>{{ theme.NameEng }}</p>
+    <p>Encore un thème</p>
+{% endfor %}
+-->
+
+
 {% for theme in words_list %}
     <p>{{ theme.0 }}</p>
+
     {% for word in theme.1 %}
         <ul>
             <li><span>{{ word.NameEng.NameEng }}</span><span>{{word.NameHira}} </span>
@@ -18,7 +27,7 @@
                 <span>{{word.NameKanji}} </span>
             <a href="{% static 'learn/audio/hello-jp.mp3' %}">Listen</a>
 
-            <!--<audio src="{% static 'learn/audio/hello-jp.mp3' %}" style="display:none;">Listen</audio>-->
+            <!--<audio src="{% static 'learn/audio/hello-jp.mp3' %}" style="display:none;">Listen</audio>
             <span>Listen slowly</span> <span>Repeat</span></li>
 
             <form action="/learn/record/" method="post">
@@ -26,10 +35,11 @@
                 <input type="hidden" name="lang" value="{{ lang }}" method="post">
                 <input class="big-button" type="submit" value="Try it!" method="post">
             </form>
-
+            -->
         </ul>
     {% endfor %}
     <hr>
+
 {% endfor %}
 
 
@@ -54,7 +64,7 @@
     <li>Red</li>
 </ul>
 
--->
+
 
 
 <form action="/learn/voc/" method="post">
@@ -64,6 +74,6 @@
     <input class="big-button" type="submit" value="Vocabulary" method="post">
 </form>
 
-
+-->
 
 {% endblock %}

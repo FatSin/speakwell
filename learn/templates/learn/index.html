@@ -22,6 +22,14 @@
             </form>
             !-->
 
+            <p>Bravo, you've pronounced the word {{ word_result }} with a score of {{ score }} !</p>
+            <form action="/learn/record/" method="put">
+                {% csrf_token %}
+                <input type="hidden" name="lang" value="jp" method="post">
+                <input class="big-button" type="submit" value="Try it!" method="put">
+            </form>
+
+
             <div>Choose your language</div>
             <hr>
             <form action="/learn/home/" method="post">

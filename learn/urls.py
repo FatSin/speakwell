@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^home/', views.home, name='home'),
     url(r'^voc/', views.voc, name='voc'),
+    url(r'^record/', views.record, name='record'),
     ]
 
 if settings.DEBUG:
