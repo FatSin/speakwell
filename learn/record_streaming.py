@@ -37,11 +37,82 @@ from google.cloud.speech import types
 import pyaudio
 from six.moves import queue
 
+#from . import draw_graph as draw
+
 # [END import_libraries]
 
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
+
+
+
+"""Draw Graph import"""
+
+import sys, os
+import wave
+
+import pyaudio
+import matplotlib.pyplot as plt
+import numpy as np
+import audioread
+import contextlib
+
+from pydub import AudioSegment
+
+def print_from_cloud(object):
+
+    """
+    frames = []
+    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+        data = stream.read(CHUNK)
+        # print(type(data))
+        # print(type(frames))
+        frames.append(data)
+    # print(frames)
+    #bframes = bytes(frames)
+    print(type(frames[0]))
+    frames = b''.join(frames)
+    """
+
+    #stream.stop_stream()
+    #stream.close()
+
+    RECORD_SECONDS = 5
+
+    #stream = object._audio_stream
+
+    frames = []
+    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+        #We chose RECORD_SECONDS =
+        data = object.read(CHUNK)
+        # print(type(data))
+        # print(type(frames))
+        frames.append(data)
+    # print(frames)
+    # bframes = bytes(frames)
+    print(type(frames[0]))
+    frames = b''.join(frames)
+
+    fig = plt.figure()
+    s = fig.add_subplot(111)
+    amplitude = np.fromstring(frames, np.int16)
+    s.plot(amplitude)
+    # Only display positive y-values
+    s.set_ylim(bottom=0.)
+    fig.savefig("learn/static/learn/fig/testcloud.png")
+
+
+
+############################
+
+#Réécriture du générateur 'requests' du main, pour pv en 1 seule boucle récup le son pour
+# 1)pv le grapher 2) pv l'envoyer au cloud
+def req_gen(gen, alist):
+    for content in gen:
+        alist.append(content)
+        yield types.StreamingRecognizeRequest(audio_content=content)
+
 
 
 class MicrophoneStream(object):
@@ -74,6 +145,13 @@ class MicrophoneStream(object):
         return self
 
     def __exit__(self, type, value, traceback):
+
+        #Added
+        #print(self.closed)
+        #print_from_cloud(self._audio_stream) #not working here..
+        #print("exiting")
+        #print(self.closed)
+
         self._audio_stream.stop_stream()
         self._audio_stream.close()
         self.closed = True
@@ -107,7 +185,51 @@ class MicrophoneStream(object):
                 except queue.Empty:
                     break
 
-            yield b''.join(data)
+            #yield b''.join(data)
+
+            #Added
+
+            frames = b''.join(data)
+
+            yield frames
+        """
+        fig = plt.figure()
+        s = fig.add_subplot(111)
+        amplitude = np.fromstring(frames, np.int16)
+        s.plot(amplitude)
+        ## Only display positive y-values
+        s.set_ylim(bottom=0.)
+        fig.savefig("static/learn/fig/testcloud.png")
+        #fig.savefig("testcloud.png")
+        """
+
+
+
+    #Attempt as a callback function
+    def print_from_cloud_callb(self):
+        RECORD_SECONDS = 5
+
+        # stream = object._audio_stream
+
+        frames = []
+        for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+            # We chose RECORD_SECONDS =
+            data = self._audio_stream.read(CHUNK)
+            # print(type(data))
+            # print(type(frames))
+            frames.append(data)
+        # print(frames)
+        # bframes = bytes(frames)
+        print(type(frames[0]))
+        frames = b''.join(frames)
+
+        fig = plt.figure()
+        s = fig.add_subplot(111)
+        amplitude = np.fromstring(frames, np.int16)
+        s.plot(amplitude)
+        # Only display positive y-values
+        s.set_ylim(bottom=0.)
+        fig.savefig("learn/static/learn/fig/testcloud.png")
 
 
 # [END audio_stream]
@@ -164,9 +286,11 @@ def listen_print_loop(responses):
             print(transcript + overwrite_chars)
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
-            if re.search(r'\b(exit|quit)\b', transcript, re.I):
-                print('Exiting..')
-                break
+            break
+
+            ##if re.search(r'\b(exit|quit)\b', transcript, re.I):
+            ##    print('Exiting..')
+            ##    break
 
             num_chars_printed = 0
 
@@ -253,19 +377,59 @@ def main():
         #Added but might have to put disable for expressions
         single_utterance=True)
 
+    frames = []
+
     with MicrophoneStream(RATE, CHUNK) as stream:
+        print(stream.closed)
         audio_generator = stream.generator()
-        requests = (types.StreamingRecognizeRequest(audio_content=content)
-                    for content in audio_generator)
+
+
+        ##requests = (types.StreamingRecognizeRequest(audio_content=content)
+        ##            for content in audio_generator)
+        requests = req_gen(audio_generator, frames)
+
+        #frames = (content for content in audio_generator)
+
 
         responses = client.streaming_recognize(streaming_config, requests)
 
+
+        print(stream.closed)
         # Now, put the transcription responses to use.
+
         #Added
-        data = listen_print_single(responses)
-        ##listen_print_loop(responses)
-    print(data)
-    return data
+        #stream.print_from_cloud_callb()
+        #print_from_cloud(stream._audio_stream)
+
+        #data = listen_print_single(responses)
+        print(stream.closed)
+
+
+        listen_print_loop(responses)
+
+    #other_gen = list(audio_generator)
+
+    print(len(frames))
+    #frames = list(frames)
+    frames = b''.join(frames)
+
+    fig = plt.figure()
+    s = fig.add_subplot(111)
+    amplitude = np.fromstring(frames, np.int16)
+    s.plot(amplitude)
+    # Only display positive y-values
+    s.set_ylim(bottom=0.)
+    fig.savefig('static/learn/fig/testcloud.png')
+
+    print(type(requests))
+    print(type(responses))
+    print(type(audio_generator))
+    print(stream._audio_stream)
+
+    #print_from_cloud(stream)
+
+    #print(data)
+    #return data
 
 
 if __name__ == '__main__':
