@@ -6,18 +6,30 @@
         <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
     </head>
 
-    <body>
+    <body id="body-jp">
         <header>
-            <div>Vowell Vocabulary Quizz Stats Parameters Logout</div>
+            <div id="banner">
+                <div>
+                    <a href="/learn/">Vowell</a>
+                </div>
+                <div id="menu">
+                    <a href="/learn/voc/">Vocabulary</a>
+                    <a href="#">Quizz</a>
+                    <a href="#">Stats</a>
+                    <a href="#">Parameters</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
         </header>
-        <hr>
+
 
         <content>
 
             {% block content%}{% endblock %}
 
         </content>
-        <hr>
+
+
         <footer>Designed by OC</footer>
         <script></script>
     </body>

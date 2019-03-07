@@ -4,43 +4,66 @@
 
 {% load static %}
 
-<div>You are learning {{ lang }}</div>
-<hr>
+<div>
+    <!--
+    <div>You are learning {{ lang }}</div>
+    <hr>
+    -->
+    <h2>Themes</h2>
 
-<h2>Themes</h2>
-
-<!--
-{% for theme in themes_list %}
-    <p>{{ theme.NameEng }}</p>
-    <p>Encore un thème</p>
-{% endfor %}
--->
-
-
-{% for theme in words_list %}
-    <p>{{ theme.0 }}</p>
-
-    {% for word in theme.1 %}
-        <ul>
-            <li><span>{{ word.NameEng.NameEng }}</span><span>{{word.NameHira}} </span>
-                <span>{{word.NameKata}} </span>
-                <span>{{word.NameKanji}} </span>
-            <a href="{% static 'learn/audio/hello-jp.mp3' %}">Listen</a>
-
-            <!--<audio src="{% static 'learn/audio/hello-jp.mp3' %}" style="display:none;">Listen</audio>
-            <span>Listen slowly</span> <span>Repeat</span></li>
-
-            <form action="/learn/record/" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="lang" value="{{ lang }}" method="post">
-                <input class="big-button" type="submit" value="Try it!" method="post">
-            </form>
-            -->
-        </ul>
+    <!--
+    {% for theme in themes_list %}
+        <p>{{ theme.NameEng }}</p>
+        <p>Encore un thème</p>
     {% endfor %}
+    -->
+    <p id="themelist">
+    {% for theme in words_list %}
+        <a href="#{{ theme.0 }}">{{ theme.0 }}</a>
+        <br>
+    {% endfor %}
+    </p>
+
     <hr>
 
-{% endfor %}
+    {% for theme in words_list %}
+        <p id="{{ theme.0 }}" style="font-weight:bold;">{{ theme.0 }}</p>
+
+        {% for word in theme.1 %}
+            <ul>
+                <li><span>{{ word.NameEng.NameEng }}</span><span>{{word.NameHira}} </span>
+                    <span>{{word.NameKata}} </span>
+                    <span>{{word.NameKanji}} </span>
+                    <br>
+                    <p class="details">
+                        <a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>
+                        <!--<a href="#">Repeat</a>-->
+                        <form action="/learn/record/" method="post">
+                        {% csrf_token %}
+                            <input type="hidden" name="lang" value="jp" method="post">
+                            <input type="hidden" name="word_in" value="{{word.NameHira}}" method="post">
+                            <input class="small-button" type="submit" value="Repeat" method="post">
+                        </form>
+
+                        <img src="{% static 'learn/img/grey-button.png' %}" width="20px">
+                    </p>
+                </li>
+                <!--<audio src="{% static 'learn/audio/hello-jp.mp3' %}" style="display:none;">Listen</audio>
+                <span>Listen slowly</span> <span>Repeat</span></li>
+
+                <form action="/learn/record/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="lang" value="{{ lang }}" method="post">
+                    <input class="big-button" type="submit" value="Try it!" method="post">
+                </form>
+                -->
+            </ul>
+        {% endfor %}
+        <hr>
+
+    {% endfor %}
+
+</div>
 
 
 

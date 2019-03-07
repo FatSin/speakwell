@@ -65,10 +65,18 @@ def voc(request):
 
 def record(request):
     data = rec()
+    word_in = request.POST.get('word_in')
+
+    if word_in in data[0]:
+        message = "Congratulations, you pronounced {0} for {1} with a score of {2}".format(word_in, data[0], data[1])
+    else:
+        message = "Oops, you did not pronounce {0} well. Did you mean {1} ?".format(word_in, data[0])
 
     context = {
-        'word_result': data[0],
-        'score': data[1],
+        #'word_result': data[0],
+        #'word_in' : word_in,
+        #'score': data[1],
+        'message' : message,
     }
 
     #return render(request, 'learn/index.html')

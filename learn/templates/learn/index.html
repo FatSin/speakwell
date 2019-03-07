@@ -6,10 +6,11 @@
         <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
     </head>
 
-    <body>
-        <header>Welcome to SpeakWell</header>
-        <hr>
+    <body id="body-index">
+        <header id="title">Welcome to SpeakWell</header>
+
         <content>
+            <div>
             <!--
             <form action="/learn/" method="get">
                 {% csrf_token %}
@@ -22,35 +23,48 @@
             </form>
             !-->
 
-            <p>Bravo, you've pronounced the word {{ word_result }} with a score of {{ score }} !</p>
+
+            <!--<p>Bravo, you've pronounced the word {{ word_result }} for {{ word_in }} with a score of {{ score }}!</p>
             <form action="/learn/record/" method="put">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="jp" method="post">
                 <input class="big-button" type="submit" value="Try it!" method="put">
             </form>
-
-
-            <div>Choose your language</div>
-            <hr>
+            -->
+            <p>{{ message }}</p>
+            <p> Choose your language</p>
+            <br>
             <form action="/learn/home/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="jp" method="post">
                 <input class="big-button" type="submit" value="Japanese" method="post">
+                <img src="{% static 'learn/img/flag-jp.png' %}" width="40px">
             </form>
             <form action="/learn/home/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="fr" method="post">
                 <input class="big-button" type="submit" value="French" method="post">
+                <img src="{% static 'learn/img/flag-fr.png' %}" width="40px">
             </form>
             <form action="/learn/home/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="ru" method="post">
                 <input class="big-button" type="submit" value="Russian" method="post">
+                <img src="{% static 'learn/img/flag-ru.png' %}" width="40px">
             </form>
 
+            <p>OR</p>
 
+            <form action="/learn/home/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="lang" value="jp" method="post">
+                <input class="big-button" type="submit" value="Continue" method="post">
+
+            </form>
+
+            </div>
         </content>
-        <hr>
+
         <footer>Designed by OC</footer>
         <script></script>
     </body>

@@ -363,8 +363,8 @@ def main():
     # language_code = 'en-US'  # a BCP-47 language tag
     #language_code = 'en-US'
     #language_code = 'fr-FR'
-    #language_code = 'ja-JP'
-    language_code = 'ru-RU'
+    language_code = 'ja-JP'
+    #language_code = 'ru-RU'
 
     client = speech.SpeechClient()
     config = types.RecognitionConfig(
@@ -401,11 +401,11 @@ def main():
         #stream.print_from_cloud_callb()
         #print_from_cloud(stream._audio_stream)
 
-        #data = listen_print_single(responses)
+        data = listen_print_single(responses)
         print(stream.closed)
 
 
-        listen_print_loop(responses)
+        #listen_print_loop(responses)
 
     #other_gen = list(audio_generator)
 
@@ -419,7 +419,9 @@ def main():
     s.plot(amplitude)
     # Only display positive y-values
     s.set_ylim(bottom=0.)
-    fig.savefig('static/learn/fig/testcloud.png')
+    #Test from local
+    #fig.savefig('static/learn/fig/testcloud.png')
+    fig.savefig('learn/static/learn/fig/testcloud.png')
 
     print(type(requests))
     print(type(responses))
@@ -428,8 +430,8 @@ def main():
 
     #print_from_cloud(stream)
 
-    #print(data)
-    #return data
+    print(data)
+    return data
 
 
 if __name__ == '__main__':

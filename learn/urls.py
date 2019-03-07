@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^home/', views.home, name='home'),
     url(r'^voc/', views.voc, name='voc'),
     url(r'^record/', views.record, name='record'),
+    #url(r'^quizz/', views.quizz, name='quizz'),
+    #url(r'^exe/', views.exe, name='exe'),
     ]
 
 if settings.DEBUG:

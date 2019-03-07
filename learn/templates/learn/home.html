@@ -4,24 +4,26 @@
 
 {% load static %}
 
-<div>You are learning {{ lang }}</div>
-<hr>
-<form action="/learn/voc/" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="lang" value="{{ lang }}" method="post">
-    <input class="big-button" type="submit" value="Vocabulary" method="post">
-</form>
-<form action="/learn/quizz/" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="lang" value="{{ lang }}" method="post">
-    <input class="big-button" type="submit" value="Quizz" method="post">
-</form>
-<form action="/learn/exe/" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="lang" value="{{ lang }}" method="post">
-    <input class="big-button" type="submit" value="Exercises" method="post">
-</form>
+<div>
+    <p>You are learning {{ lang }}</p>
 
+    <form action="/learn/voc/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="lang" value="{{ lang }}" method="post">
+        <input class="big-button" type="submit" value="Vocabulary" method="post">
+    </form>
+    <form action="/learn/quizz/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="lang" value="{{ lang }}" method="post">
+        <input class="big-button" type="submit" value="Quizz" method="post">
+    </form>
+    <form action="/learn/exe/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="lang" value="{{ lang }}" method="post">
+        <input class="big-button" type="submit" value="Exercises" method="post">
+    </form>
+
+</div>
 
 
 {% endblock %}
