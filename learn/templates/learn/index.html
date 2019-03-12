@@ -37,29 +37,34 @@
             <form action="/learn/register/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="jp" method="post">
+                <input type="hidden" name="create-user" value="1" method="post">
                 <input class="big-button" type="submit" value="Japanese" method="post">
                 <img src="{% static 'learn/img/flag-jp.png' %}" width="40px">
             </form>
             <form action="/learn/register/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="fr" method="post">
+                <input type="hidden" name="create-user" value="1" method="post">
                 <input class="big-button" type="submit" value="French" method="post">
                 <img src="{% static 'learn/img/flag-fr.png' %}" width="40px">
             </form>
             <form action="/learn/register/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="ru" method="post">
+                <input type="hidden" name="create-user" value="1" method="post">
                 <input class="big-button" type="submit" value="Russian" method="post">
                 <img src="{% static 'learn/img/flag-ru.png' %}" width="40px">
             </form>
 
             <p>OR</p>
 
-            <form action="/learn/home/" method="post">
+            <form action="/learn/submit_form/" method="post">
                 {% csrf_token %}
+                LOG IN<br>
                 <input type="hidden" name="lang" value="jp" method="post">
+                Username <input type="text" name="username" method="post" required> <br>
+                Password  <input type="text" name="password" method="post" required><br>
                 <input class="big-button" type="submit" value="Continue" method="post">
-
             </form>
 
             </div>

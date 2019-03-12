@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from django.shortcuts import render
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from PIL import Image, ImageTk
 
@@ -22,21 +22,43 @@ def register(request):
     return render(request, 'learn/register.html', context)
 
 def submit_form(request):
+    create_user = request.POST.get('create-user')
     lang = request.POST.get('lang')
     username = request.POST.get('username')
     password = request.POST.get('password')
     email = request.POST.get('email')
     lang_dis = "English"
 
-    user = User.objects.create_user(username, email, password)
-    language = Language.objects.get(NameEng=lang_dis)
-    customu = Usercustom.objects.create(user=user, LangDisplay=language)
+    if create_user:
+        new_user = User.objects.create_user(username, email, password)
+        language = Language.objects.get(NameEng=lang_dis)
+        customu = Usercustom.objects.create(user=new_user, LangDisplay=language)
 
+    user = authenticate(username=username, password=password)
 
-    context = {
-        'lang': lang
-    }
-    return render(request, 'learn/home.html', context)
+    if user is not None:
+        message = "Authentication successful for user {0}".format(username)
+        print(message)
+
+        login(request, user)
+
+        context = {
+            'lang': lang,
+            'message': message
+        }
+
+        return render(request, 'learn/home.html', context)
+
+    else:
+        message = "Authentication failed, please retry"
+        context = {
+            'message' : message
+        }
+        return render (request, 'learn/index.html', context)
+
+def log_out(request):
+    logout(request)
+    return render(request, 'learn/index.html')
 
 def home(request):
 

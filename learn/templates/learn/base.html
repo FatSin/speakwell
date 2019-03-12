@@ -17,13 +17,17 @@
                     <a href="#">Quizz</a>
                     <a href="#">Stats</a>
                     <a href="#">Parameters</a>
-                    <a href="#">Logout</a>
+                    <a href="/learn/log_out/">Logout</a>
                 </div>
             </div>
         </header>
 
 
         <content>
+
+            <div>
+                <p>You are learning {{ lang }}, {{ message }}.</p>
+                <p>Hello, {{ user.username }}</p>
 
             {% block content%}{% endblock %}
 
