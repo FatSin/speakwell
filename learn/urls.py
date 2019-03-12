@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^$', views.index, name='index'),
+    url(r'^register/', views.register, name='register'),
+    url(r'^submit_form/', views.submit_form, name='submit_form'),
     url(r'^home/', views.home, name='home'),
     url(r'^voc/', views.voc, name='voc'),
     url(r'^record/', views.record, name='record'),

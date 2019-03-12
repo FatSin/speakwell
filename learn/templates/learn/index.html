@@ -34,19 +34,19 @@
             <p>{{ message }}</p>
             <p> Choose your language</p>
             <br>
-            <form action="/learn/home/" method="post">
+            <form action="/learn/register/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="jp" method="post">
                 <input class="big-button" type="submit" value="Japanese" method="post">
                 <img src="{% static 'learn/img/flag-jp.png' %}" width="40px">
             </form>
-            <form action="/learn/home/" method="post">
+            <form action="/learn/register/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="fr" method="post">
                 <input class="big-button" type="submit" value="French" method="post">
                 <img src="{% static 'learn/img/flag-fr.png' %}" width="40px">
             </form>
-            <form action="/learn/home/" method="post">
+            <form action="/learn/register/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="ru" method="post">
                 <input class="big-button" type="submit" value="Russian" method="post">

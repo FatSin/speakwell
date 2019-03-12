@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
@@ -7,10 +8,11 @@ class Language(models.Model):
     NameEng = models.CharField(max_length=20, unique=True)
     Code = models.CharField(max_length=7, unique=True)
 
-class User(models.Model):
-    LoginName = models.CharField(max_length=20, unique=True)
-    Password = models.CharField(max_length=20, unique=True)
-    Email = models.CharField(max_length=20)
+class Usercustom(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    #LoginName = models.CharField(max_length=20, unique=True)
+    #Password = models.CharField(max_length=20, unique=True)
+    #Email = models.CharField(max_length=20)
     #A voir si ça ne va pas poser souci dans la modif de langue
     LangDisplay = models.ForeignKey(Language, on_delete=models.CASCADE)
 
@@ -28,7 +30,7 @@ class Wordjp(models.Model):
 
 
 class Progression(models.Model):
-    UserId = models.ForeignKey(User, on_delete=models.CASCADE)
+    UserId = models.ForeignKey(Usercustom, on_delete=models.CASCADE)
     LangId = models.ForeignKey(Language, on_delete=models.CASCADE)
     Level = models.PositiveSmallIntegerField()
     Points = models.PositiveIntegerField()

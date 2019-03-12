@@ -1,9 +1,11 @@
 import tkinter as tk
 
 from django.shortcuts import render
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from PIL import Image, ImageTk
 
-from .models import User, Language, Word, Wordjp, Progression, Theme
+from .models import Usercustom, Language, Word, Wordjp, Progression, Theme
 
 from .record_streaming import main as rec
 
@@ -11,6 +13,30 @@ from .record_streaming import main as rec
 
 def index(request):
     return render(request, 'learn/index.html')
+
+def register(request):
+    lang = request.POST.get('lang')
+    context = {
+        'lang': lang
+    }
+    return render(request, 'learn/register.html', context)
+
+def submit_form(request):
+    lang = request.POST.get('lang')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    email = request.POST.get('email')
+    lang_dis = "English"
+
+    user = User.objects.create_user(username, email, password)
+    language = Language.objects.get(NameEng=lang_dis)
+    customu = Usercustom.objects.create(user=user, LangDisplay=language)
+
+
+    context = {
+        'lang': lang
+    }
+    return render(request, 'learn/home.html', context)
 
 def home(request):
 

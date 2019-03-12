@@ -1,0 +1,35 @@
+{% load static %}
+
+<HTML>
+    <head>
+        <title>Listen and learn</title>
+        <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
+    </head>
+
+    <body id="body-index">
+        <header id="title">Welcome to SpeakWell</header>
+
+        <content>
+
+            <div>
+                <p>You are learning {{ lang }}</p>
+                <h2>Create an account</h2>
+
+                <form action="/learn/submit_form/" method="post">
+                    {% csrf_token %}
+                    Username <input type="text" name="username" method="post" required> <br>
+                    Password  <input type="text" name="password" method="post" required> (8 characters minimum)<br>
+                    Email <input type="text" name="email" method="post" required> <br>
+                    Display language <input type="text" name="lang-display" method="post" required> <br>
+                    <input type="hidden" name="lang" value="{{ lang }}" method="post">
+                    <input class="big-button" type="submit" value="Create" method="post">
+                </form>
+
+            </div>
+
+
+        </content>
+
+        <footer>Designed by OC</footer>
+        <script></script>
+    </body>
