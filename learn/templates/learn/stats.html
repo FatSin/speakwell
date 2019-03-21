@@ -1,0 +1,21 @@
+{% extends "learn/base.html" %}
+
+{% block content %}
+
+{% load static %}
+
+{% for prog in progressions %}
+
+    <p>Here is your progression</p>
+    <p>Language: {{prog.LangId}}</p>
+    <p>LEVEL : {{prog.Level}}</P>
+    <p>Points : {{prog.Points}}</P>
+    <p>Words completed : {{prog.WordsLearnt}}</p>
+    <p>Exercises completed : {{prog.Exelearnt}}</p>
+    <p>Facts unblocked : {{prog.FunFacts}} </p>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

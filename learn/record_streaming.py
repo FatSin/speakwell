@@ -60,6 +60,27 @@ import contextlib
 
 from pydub import AudioSegment
 
+
+def print_from_mp3(word, lang):
+    path = "learn/static/learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
+    sound = AudioSegment.from_mp3(path)
+    # get raw audio data as a bytestring
+    raw_data = sound.raw_data
+    # get the frame rate
+    sample_rate = sound.frame_rate
+    # get amount of bytes contained in one sample
+    sample_size = sound.sample_width
+    # get channels
+    channels = sound.channels
+
+    fig = plt.figure()
+    s = fig.add_subplot(111)
+    amplitude = np.fromstring(raw_data, np.int16)
+    s.plot(amplitude)
+    #Only display positive y-values
+    s.set_ylim(bottom=0.)
+    fig.savefig("learn/static/learn/fig/"+lang+"/"+word+"-"+lang+".png")
+
 def print_from_cloud(object):
 
     """
