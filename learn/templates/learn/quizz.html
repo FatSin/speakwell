@@ -1,3 +1,7 @@
+{% extends "learn/base.html" %}
+
+{% block content %}
+
 {% load static %}
 
 <HTML>
@@ -10,11 +14,21 @@
         <header>Welcome to SpeakWell</header>
         <hr>
         <content>
-            Quizz !
+            <form action="/learn/quizz/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="lang" value="{{lang}}" method="post">
+                <input type="hidden" name="launch" value="1" method="post">
 
-
+                Number of words (10-99): <input type="text" name="number" method="post">
+                Mode :<br>
+                Recognition: <input type="radio" name="mode" value="rec" method="post">
+                Inverted recognition: <input type="radio" name="mode" value="inv_rec" method="post">
+                <input class="big-button" type="submit" value="Launch !" method="post">
+            </form>
         </content>
         <hr>
         <footer>Designed by OC</footer>
         <script></script>
     </body>
+
+{% endblock %}

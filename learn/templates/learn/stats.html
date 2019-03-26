@@ -4,17 +4,43 @@
 
 {% load static %}
 
+<p>Here is your progression</p>
+
 {% for prog in progressions %}
 
-    <p>Here is your progression</p>
-    <p>Language: {{prog.LangId}}</p>
-    <p>LEVEL : {{prog.Level}}</P>
-    <p>Points : {{prog.Points}}</P>
-    <p>Words completed : {{prog.WordsLearnt}}</p>
-    <p>Exercises completed : {{prog.Exelearnt}}</p>
-    <p>Facts unblocked : {{prog.FunFacts}} </p>
 
+    <p>
+        <p>Language: {{prog.LangId}}</p>
+        <p>Progid: {{prog.id}}</p>
+        <p>LEVEL : {{prog.Level}}</P>
+        <p>Points : {{prog.Points}}</P>
+        <p>Words completed : {{prog.WordsLearnt}}</p>
+        <p>Exercises completed : {{prog.Exelearnt}}</p>
+        <p>Facts unblocked : {{prog.FunFacts}} </p>
+
+        <br>
+        {% if prog.IsActive != True %}
+
+        <form action="/learn/home/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="switch" value="1" method="post">
+                    <input type="hidden" name="progid" value="{{ prog.id }}" method="post">
+                    <input type="hidden" name="lang" value="{{ prog.LangId}}" method="post">
+                    <input class="big-button" type="submit" value="Activate this language" method="post">
+        </form>
+        {% endif %}
+    </p>
 {% endfor %}
+
+
+    <!--
+    <form action="/learn/switch_language/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="create-prog" value="1" method="post">
+                <input class="big-button" type="submit" value="Learn a new language" method="post">
+                <img src="{% static 'learn/img/flag-fr.png' %}" width="40px">
+    </form>
+    -->
 
 </div>
 

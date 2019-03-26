@@ -1,6 +1,6 @@
 import tkinter as tk
 
-import os, sys
+import os, sys, random
 
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
@@ -8,12 +8,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from PIL import Image, ImageTk
 
-from .models import Usercustom, Language, Word, Wordjp, Progression, Theme
+from .models import Usercustom, Language, Word, Wordjp, Wordfr, Wordru, Progression, Theme
+
+from .forms import RegisterForm
 
 from .record_streaming import main as rec
 from .record_streaming import print_from_mp3
 
 # Create your views here.
+
+
+
+
 
 def index(request):
     return render(request, 'learn/index.html')
@@ -23,9 +29,13 @@ def register(request):
     context = {
         'lang': lang
     }
-    return render(request, 'learn/register.html', context)
+    return render(request, 'learn/register_html.html', context)
+
 
 def submit_form(request):
+
+    """Unused. Too complicated because of the hidden field 'lang' !"""
+
     create_user = request.POST.get('create-user')
     lang = request.POST.get('lang')
     username = request.POST.get('username')
@@ -33,19 +43,81 @@ def submit_form(request):
     email = request.POST.get('email')
     lang_dis = "English"
 
+    form = RegisterForm(request.POST)
+
+    if form.is_valid():
+        pass
+
+
     if create_user:
         new_user = User.objects.create_user(username, email, password)
         language = Language.objects.get(NameEng=lang_dis)
         customu = Usercustom.objects.create(user=new_user, LangDisplay=language)
         #Create a progression in the selected language
         new_progression = Progression.objects.create(
-            UserId=customu.id,
-            LangId =lang,
+            UserId=customu,
+            LangId =language,
             Level=0,
             Points=0,
             WordsLearnt=0,
             Exelearnt=0,
             FunFacts=0
+            )
+
+
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+        message = "Authentication successful for user {0}".format(username)
+        print(message)
+
+        login(request, user)
+
+        context = {
+            'lang': lang,
+            'message': message
+        }
+
+        return render(request, 'learn/home.html', context)
+
+    else:
+        message = "Authentication failed, please retry"
+        context = {
+            'message' : message
+        }
+        return render (request, 'learn/index.html', context)
+
+
+
+def submit_form_html(request):
+    create_user = request.POST.get('create-user')
+    lang = request.POST.get('lang')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    email = request.POST.get('email')
+    lang_dis = request.POST.get('lang-display')
+
+    if create_user:
+        new_user = User.objects.create_user(username, email, password)
+        if lang == 'jp':
+            language = Language.objects.get(NameEng='Japanese')
+        elif lang == 'fr':
+            language = Language.objects.get(NameEng='French')
+        elif lang == 'ru':
+            language = Language.objects.get(NameEng='Russian')
+
+        #language = Language.objects.get(NameEng=lang)
+        language_dis = Language.objects.get(NameEng=lang_dis)
+        customu = Usercustom.objects.create(user=new_user, LangDisplay=language_dis)
+        #Create a progression in the selected language
+        new_progression = Progression.objects.create(
+            UserId=customu,
+            LangId =language,
+            Level=0,
+            Points=0,
+            WordsLearnt=[0],
+            Exelearnt=[0],
+            FunFacts=[0]
             )
 
 
@@ -79,10 +151,39 @@ def log_out(request):
 def home(request):
 
     lang = request.POST.get('lang')
+    switch = request.POST.get('switch')
+    prog_id = request.POST.get('progid')
+
+    user = request.user
+    custom_user = Usercustom.objects.get(user=user)
+
+    if switch:
+        old_progression = Progression.objects.get(UserId=custom_user, IsActive=True)
+        if prog_id:
+            new_progression = Progression.objects.get(id=prog_id)
+            new_progression.IsActive = True
+            new_progression.save()
+        else:
+            language = Language.objects.get(NameEng=lang)
+            new_progression = Progression.objects.create(
+                UserId=custom_user,
+                LangId=language,
+                Level=0,
+                Points=0,
+                WordsLearnt=[0],
+                Exelearnt=[0],
+                FunFacts=[0]
+            )
+        old_progression.IsActive = False
+        old_progression.save()
+
     context = {
-        'lang':lang
+        'lang':lang,
     }
     return render(request, 'learn/home.html', context)
+
+
+
 
 @login_required(login_url='/learn/')
 def stats(request):
@@ -90,7 +191,15 @@ def stats(request):
     custom_user = Usercustom.objects.get(user=user)
 
     print('Recherche des prog pour user.Username, avec id:{0}'.format(custom_user.id))
-    progressions = Progression.objects.filter(UserId=custom_user.id).all()
+    progressions = Progression.objects.filter(UserId=custom_user.id).order_by('IsActive').reverse()
+    progressions_list = [prog for prog in progressions]
+
+    languages = Language.objects.all()
+    for language in languages:
+        if language not in [prog.LangId for prog in progressions]:
+            no_progression = {'LangId':language.NameEng,
+                              }
+            progressions_list.append(no_progression)
 
     for prog in progressions:
         print('Info sur la progression:')
@@ -99,7 +208,7 @@ def stats(request):
         print(prog.UserId)
 
     context={
-        'progressions':progressions
+        'progressions':progressions_list
     }
     return render(request, 'learn/stats.html', context)
 
@@ -117,12 +226,15 @@ def voc(request):
     print('Liste des words acquis:')
     print(words_done)
 
-    if lang is None:
-        lang_id = progression.LangId.id
-        if lang_id == 1:
-            lang = "jp"
-        else:
-            message ="No language selected"
+    lang_id = progression.LangId.id
+    if lang_id == 1:
+        lang = "jp"
+    elif lang_id == 3:
+        lang = "fr"
+    elif lang_id == 4:
+        lang = "ru"
+    else:
+        message ="Error. No language selected"
 
 
     #wordsen_list = []
@@ -142,6 +254,18 @@ def voc(request):
                 try:
                     wrdjp = Wordjp.objects.filter(NameEng = wrd.id).get()
                     words_sublist.append(wrdjp)
+                except:
+                    print('The word {0} has no correspondant in {1}'.format(wrd,lang))
+            elif lang == 'fr':
+                try:
+                    wrdfr = Wordfr.objects.filter(NameEng = wrd.id).get()
+                    words_sublist.append(wrdfr)
+                except:
+                    print('The word {0} has no correspondant in {1}'.format(wrd,lang))
+            elif lang == 'ru':
+                try:
+                    wrdru = Wordru.objects.filter(NameEng = wrd.id).get()
+                    words_sublist.append(wrdru)
                 except:
                     print('The word {0} has no correspondant in {1}'.format(wrd,lang))
             #words_list = [thm.NameEng, words_sublist]
@@ -264,3 +388,47 @@ def record(request):
 
     #return render(request, 'learn/voc.html', context)
     return voc(request)
+
+def quizz(request):
+    user = request.user
+    custom_user = Usercustom.objects.get(user=user)
+    progression = Progression.objects.get(UserId=custom_user, IsActive=True)
+    lang = progression.LangId.NameEng
+    launch = request.POST.get('launch')
+
+
+    if launch:
+        num = request.POST.get('number')
+        mode = request.POST.get('mode')
+
+        class Quizz():
+
+            def __init__(self, lg, md, nb):
+                self.lg = lg
+                self.md = md
+                self.nb = nb
+                self.score = 0
+
+                if lg == 'Japanese':
+                    word_list = [word for word in Wordjp.objects.all()]
+                    word_list = random.choice(word_list, self.nb)
+
+            def check_answer(self):
+                pass
+            def next_word(self):
+                self.nb += 1
+
+
+
+
+        context = {
+            'lang': lang,
+            'num': num,
+            'mode': mode
+        }
+        return render(request, 'learn/launch_quizz.html', context)
+
+    context = {
+        'lang': lang
+    }
+    return render(request, 'learn/quizz.html', context)

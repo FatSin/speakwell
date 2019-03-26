@@ -19,6 +19,9 @@ class Usercustom(models.Model):
     #A voir si ça ne va pas poser souci dans la modif de langue
     LangDisplay = models.ForeignKey(Language, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return '{0}'.format(self.user)
+
 
 class Word(models.Model):
     NameEng = models.CharField(max_length=20, unique=True)
@@ -32,6 +35,24 @@ class Wordjp(models.Model):
     NameHira = models.CharField(max_length=20)
     NameKata = models.CharField(max_length=20)
     NameKanji = models.CharField(max_length=20)
+    NameRoma = models.CharField(max_length=20)
+    NameEng = models.ForeignKey(Word, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{0}'.format(self.NameRoma)
+
+class Wordfr(models.Model):
+    Phonetics = models.CharField(max_length=20)
+    Name = models.CharField(max_length=30)
+    NameEng = models.ForeignKey(Word, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{0}'.format(self.Name)
+
+
+class Wordru(models.Model):
+    Phonetics = models.CharField(max_length=20)
+    NameRu = models.CharField(max_length=20)
     NameRoma = models.CharField(max_length=20)
     NameEng = models.ForeignKey(Word, on_delete=models.CASCADE)
 
