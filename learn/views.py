@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from PIL import Image, ImageTk
 
-from .models import Usercustom, Language, Word, Wordjp, Wordfr, Wordru, Progression, Theme
+from .models import Usercustom, Language, Word, Wordjp, Wordfr, Wordru, Progression, Theme, Quizz
 
 from .forms import RegisterForm
 
@@ -389,6 +389,175 @@ def record(request):
     #return render(request, 'learn/voc.html', context)
     return voc(request)
 
+
+@login_required(login_url='/learn/')
+def quizz(request):
+    user = request.user
+    custom_user = Usercustom.objects.get(user=user)
+    progression = Progression.objects.get(UserId=custom_user, IsActive=True)
+    langid = progression.LangId.id
+
+
+    started = request.POST.get('started')
+    launch = request.POST.get('launch')
+    check = request.POST.get('check')
+
+    if not started:
+        context = {
+            'lang': progression.LangId
+        }
+        return render(request, 'learn/quizz.html', context)
+
+    #Check if a quizz is already started for the current progression
+
+    if check:
+        cur_word = request.POST.get('cur_word')
+        response = request.POST.get('response')
+
+        quizz = Quizz.objects.get(Progression=progression, State=1)
+
+        if response == cur_word:
+            message = 'Nice one !'
+            quizz.Score +=10
+        else:
+            message = 'OOps, wrong answer.'
+
+        quizz.save()
+
+        context = {
+            'lang': progression.LangId,
+            'score': quizz.Score,
+            'total': quizz.Total,
+            'mode': quizz.Mode,
+            'word_list': quizz.WordList,
+            'cur_word': cur_word,
+            #'responses': responses,
+            'button': 'Next',
+            'message': message
+        }
+        return render(request, 'learn/launch_quizz.html', context)
+
+    #Start a quizz
+    if launch :
+        total = request.POST.get('number')
+        if total:
+            total = int(total)
+        mode = request.POST.get('mode')
+
+        if langid == 1 :
+            word_list_total = [word for word in Wordjp.objects.all()]
+
+        if langid == 3:
+            word_list_total = [word for word in Wordfr.objects.all()]
+
+        if langid == 4:
+            word_list_total = [word for word in Wordru.objects.all()]
+
+        word_list = []
+        # word_list = random.choice(word_list, total)
+        for i in range(0, total):
+            ind = random.randint(0, len(word_list_total) - 1)
+            word_list.append(word_list_total[ind])
+            word_list_total.pop(ind)
+
+
+        print('Inital word list :')
+        print(word_list)
+
+        quizz = Quizz.objects.create(
+            Progression=progression,
+            Score =0,
+            WordList=[word.id for word in word_list],
+            Total=total,
+            Difficulty=1,
+            Mode=mode,
+            State=1
+            )
+        quizz.save()
+
+    else:
+        quizz = Quizz.objects.get(Progression=progression, State=1)
+
+        #if langid == 1:
+        #    word_list_total = [word for word in Wordjp.objects.all()]
+
+        if langid == 3:
+            word_list_total = [word for word in Wordfr.objects.all()]
+
+        if langid == 4:
+            word_list_total = [word for word in Wordru.objects.all()]
+
+    if len(quizz.WordList) < 1:
+        if quizz.Score >= quizz.Total*0.7:
+            message = 'The quizz is completed. You scored {0}. Congratulations'.format(quizz.Score)
+            progression.Points += 15
+            progression.save()
+        else:
+            message = "The quizz is completed. You scored {0}. Keep practising and don't give up !".format(quizz.Score)
+        quizz.State = 0
+        quizz.save()
+
+        context = {
+            'lang': progression.LangId,
+            'score': quizz.Score,
+            'total': quizz.Total,
+            'mode': quizz.Mode,
+            'word_list': quizz.WordList,
+            'message': message,
+        }
+
+
+    else:
+        cur_word_id = quizz.WordList.pop(random.randint(0, len(quizz.WordList) - 1))
+        if langid == 1:
+            cur_word = Wordjp.objects.get(id=cur_word_id)
+            word_list_total = [word for word in Wordjp.objects.exclude(id=cur_word_id)]
+
+        if langid == 3:
+            cur_word = Wordfr.objects.get(id=cur_word_id)
+
+        if langid == 4:
+            cur_word = Wordru.objects.get(id=cur_word_id)
+
+        #word_list_total.pop(cur_word)
+
+
+        responses = []
+        for i in range(0, 3):
+            # responses.append(cur_word)
+            ind = random.randint(0, len(word_list_total) - 1)
+            responses.append(word_list_total[ind])
+        ind = random.randint(0, len(responses))
+        responses.insert(ind, cur_word)
+
+        if langid == 'French':
+            responses = [word for word in Wordfr.objects.all()]
+            responses.append(cur_word)
+            responses = random.choice(word_list, 4)
+        if langid == 'Russian':
+            responses = [word for word in Wordru.objects.all()]
+            responses.append(cur_word)
+            responses = random.choice(word_list, 4)
+
+        quizz.save()
+
+        context = {
+            'lang': progression.LangId,
+            'score': quizz.Score,
+            'total': quizz.Total,
+            'mode': quizz.Mode,
+            'word_list': quizz.WordList,
+            'responses': responses,
+            'button': 'Confirm',
+            'cur_word': cur_word
+        }
+
+    return render(request, 'learn/launch_quizz.html', context)
+
+
+
+
+"""
 @login_required(login_url='/learn/')
 def quizz(request):
     user = request.user
@@ -403,6 +572,8 @@ def quizz(request):
             'lang': lang
         }
         return render(request, 'learn/quizz.html', context)
+    
+    
 
 
     launch = request.POST.get('launch')
@@ -459,7 +630,7 @@ def quizz(request):
         #num = request.POST.get('number')
         #mode = request.POST.get('mode')
 
-        """Don't know what to do with this...
+    #Don't know what to do with this...
         class Quizz():
 
             def __init__(self, lg, md, nb):
@@ -487,8 +658,7 @@ def quizz(request):
         
         new_quizz = Quizz(lang, mode, num)
         
-        """
-
+    
         score = 0
         if lang == 'Japanese':
             word_list_total = [word for word in Wordjp.objects.all()]
@@ -549,5 +719,8 @@ def quizz(request):
         'cur_word':cur_word
     }
     return render(request, 'learn/launch_quizz.html', context)
+    """
+
+
 
 

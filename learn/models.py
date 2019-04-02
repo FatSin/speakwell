@@ -24,7 +24,7 @@ class Usercustom(models.Model):
 
 
 class Word(models.Model):
-    NameEng = models.CharField(max_length=20, unique=True)
+    NameEng = models.CharField(max_length=40, unique=True)
     IsEnabled = models.BooleanField(max_length=20, default=True)
 
     def __str__(self):
