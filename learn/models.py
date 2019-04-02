@@ -70,6 +70,9 @@ class Progression(models.Model):
     FunFacts = ArrayField(models.PositiveSmallIntegerField())
     IsActive = models.BooleanField(max_length=20, default=True)
 
+    def __str__(self):
+        return '{0} {1}'.format(self.UserId, self.LangId)
+
 
 class Theme(models.Model):
     NameEng = models.CharField(max_length=20)
@@ -81,6 +84,11 @@ class Theme(models.Model):
         return '{0}'.format(self.NameEng)
 
 
-
-
-
+class Quizz(models.Model):
+    Progression = models.ForeignKey(Progression, on_delete=models.CASCADE)
+    Score = models.PositiveIntegerField()
+    WordList = ArrayField(models.PositiveSmallIntegerField())
+    Total = models.PositiveIntegerField()
+    Difficulty = models.PositiveIntegerField()
+    Mode = models.CharField(max_length=20)
+    State = models.PositiveIntegerField()

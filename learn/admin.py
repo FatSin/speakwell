@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Word, Wordjp, Wordfr, Wordru, Language, Theme, Usercustom, Progression
+from .models import Word, Wordjp, Wordfr, Wordru, Language, Theme, Usercustom, Progression, Quizz
 
 # Register your models here.
 admin.site.register(Word)
@@ -11,3 +11,4 @@ admin.site.register(Language)
 admin.site.register(Theme)
 admin.site.register(Usercustom)
 admin.site.register(Progression)
+admin.site.register(Quizz)

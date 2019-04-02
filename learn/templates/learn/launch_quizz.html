@@ -14,19 +14,25 @@
         <header>Welcome to SpeakWell</header>
         <hr>
         <content>
-            <p>Quizz mode : {{mode}}</p>
-            <p>Language : {{lang}}</p>
-            <p>Score : {{score_cur}}/{{num}}</p>
+            <p>Quizz mode : {{mode}}</p><br>
+            <p>Language : {{lang}}</p><br>
+            <p>Score : {{score}}/{{total}}</p><br>
             <form action="/learn/quizz/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="lang" value="{{lang}}" method="post">
-                <input type="hidden" name="num_curr" value="{{num_curr}}" method="post">
-                <p>{{word_to_guess}}</p><br>
-                {{word_1}} <input type="radio" name="response" value="{{word_1}}" method="post"><br>
-                {{word_2}} <input type="radio" name="response" value="{{word_2}}" method="post"><br>
-                {{word_3}} <input type="radio" name="response" value="{{word_3}}" method="post"><br>
-                {{word_4}} <input type="radio" name="response" value="{{word_4}}" method="post"><br>
-                <input class="big-button" type="submit" value="confirm" method="post">
+                <input type="hidden" name="started" value="1" method="post">
+                {% if button == 'Confirm' %}
+                <input type="hidden" name="check" value="1" method="post">
+                {% endif %}
+                <input type="hidden" name="cur_word" value="{{cur_word.NameEng}}" method="post">
+                <input type="hidden" name="word_list" value="{{word_list}}" method="post">
+                <input type="hidden" name="responses" value="{{responses}}" method="post">
+                <p>What is this word ? : {{cur_word.NameHira}}</p><br>
+                {{responses.0.NameEng}} <input type="radio" name="response" value="{{responses.0.NameEng}}" method="post"><br>
+                {{responses.1.NameEng}} <input type="radio" name="response" value="{{responses.1.NameEng}}" method="post"><br>
+                {{responses.2.NameEng}} <input type="radio" name="response" value="{{responses.2.NameEng}}" method="post"><br>
+                {{responses.3.NameEng}} <input type="radio" name="response" value="{{responses.3.NameEng}}" method="post"><br>
+                <input class="big-button" type="submit" value="{{button}}" method="post">
             </form>
         </content>
         <hr>
