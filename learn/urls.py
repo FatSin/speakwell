@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 
 from . import views
 
@@ -9,8 +10,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^register/', views.register, name='register'),
-    url(r'^submit_form/', views.submit_form, name='submit_form'),
+    #url(r'^submit_form/', views.submit_form, name='submit_form'),
     url(r'^submit_form_html/', views.submit_form_html, name='submit_form_html'),
+    #url(r'^log_out/$', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='log_out'),
     url(r'^log_out/', views.log_out, name='log_out'),
     url(r'^home/', views.home, name='home'),
     url(r'^voc/', views.voc, name='voc'),

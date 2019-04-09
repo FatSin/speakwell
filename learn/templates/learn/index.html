@@ -36,31 +36,33 @@
             <br>
             <form action="/learn/register/" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="lang" value="jp" method="post">
+                <input type="hidden" name="lang" value="Japanese" method="post">
                 <input class="big-button" type="submit" value="Japanese" method="post">
-                <img src="{% static 'learn/img/flag-jp.png' %}" width="40px">
+                <img src="{% static 'learn/img/flag-jp2.png' %}" width="40px">
             </form>
             <form action="/learn/register/" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="lang" value="fr" method="post">
+                <input type="hidden" name="lang" value="French" method="post">
                 <input class="big-button" type="submit" value="French" method="post">
-                <img src="{% static 'learn/img/flag-fr.png' %}" width="40px">
+                <img src="{% static 'learn/img/flag-fr2.png' %}" width="40px">
             </form>
             <form action="/learn/register/" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="lang" value="ru" method="post">
+                <input type="hidden" name="lang" value="Russian" method="post">
                 <input class="big-button" type="submit" value="Russian" method="post">
-                <img src="{% static 'learn/img/flag-ru.png' %}" width="40px">
+                <img src="{% static 'learn/img/flag-ru2.png' %}" width="40px">
             </form>
+            </div>
 
-            <p>OR</p>
+            <div style="width: 1%;padding-top: 5%;background:none;color:white;font-size: 1.5em;margin: 5% 2% 2% 0;">OR</div>
 
-            <form action="/learn/submit_form/" method="post">
+            <div style="margin-top: 6%;height: 3%;width: 25%;">
+            <form action="/learn/submit_form_html/" method="post">
                 {% csrf_token %}
-                LOG IN<br>
+                LOG IN<br><br>
                 <input type="hidden" name="lang" value="jp" method="post">
-                Username <input type="text" name="username" method="post" required> <br>
-                Password  <input type="text" name="password" method="post" required><br>
+                Username <input type="text" name="username" method="post" required> <br><br>
+                Password  <input type="password" name="password" method="post" required><br><br>
                 <input class="big-button" type="submit" value="Continue" method="post">
             </form>
 

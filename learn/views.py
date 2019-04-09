@@ -20,8 +20,10 @@ from .record_streaming import print_from_mp3
 
 
 
-
 def index(request):
+    user = request.user
+    if user.is_authenticated:
+        return home(request)
     return render(request, 'learn/index.html')
 
 def register(request):
@@ -31,10 +33,10 @@ def register(request):
     }
     return render(request, 'learn/register_html.html', context)
 
-
+"""
 def submit_form(request):
 
-    """Unused. Too complicated because of the hidden field 'lang' !"""
+    #Unused. Too complicated because of the hidden field 'lang' !
 
     create_user = request.POST.get('create-user')
     lang = request.POST.get('lang')
@@ -42,6 +44,15 @@ def submit_form(request):
     password = request.POST.get('password')
     email = request.POST.get('email')
     lang_dis = "English"
+
+    if lang:
+        if lang == 'jp':
+            lang = 'Japanese'
+        if lang == 'fr':
+            lang = 'French'
+        if lang == 'ru':
+            lang = 'Russian'
+
 
     form = RegisterForm(request.POST)
 
@@ -86,7 +97,7 @@ def submit_form(request):
             'message' : message
         }
         return render (request, 'learn/index.html', context)
-
+"""
 
 
 def submit_form_html(request):
@@ -99,12 +110,7 @@ def submit_form_html(request):
 
     if create_user:
         new_user = User.objects.create_user(username, email, password)
-        if lang == 'jp':
-            language = Language.objects.get(NameEng='Japanese')
-        elif lang == 'fr':
-            language = Language.objects.get(NameEng='French')
-        elif lang == 'ru':
-            language = Language.objects.get(NameEng='Russian')
+        language = Language.objects.get(NameEng=lang)
 
         #language = Language.objects.get(NameEng=lang)
         language_dis = Language.objects.get(NameEng=lang_dis)
@@ -130,11 +136,10 @@ def submit_form_html(request):
         login(request, user)
 
         context = {
-            'lang': lang,
-            'message': message
+            'lang': lang
         }
 
-        return render(request, 'learn/home.html', context)
+        return home(request)
 
     else:
         message = "Authentication failed, please retry"
@@ -146,39 +151,52 @@ def submit_form_html(request):
 def log_out(request):
     logout(request)
     return render(request, 'learn/index.html')
+    #return index(request)
 
 @login_required(login_url='/learn/')
 def home(request):
 
-    lang = request.POST.get('lang')
+    #lang = request.POST.get('lang')
     switch = request.POST.get('switch')
     prog_id = request.POST.get('progid')
 
     user = request.user
     custom_user = Usercustom.objects.get(user=user)
 
+    old_progression = Progression.objects.get(UserId=custom_user.id, IsActive=True)
+    lang = old_progression.LangId
+    message = ''
+
     if switch:
-        old_progression = Progression.objects.get(UserId=custom_user, IsActive=True)
+        #old_progression = Progression.objects.get(UserId=custom_user, IsActive=True)
         if prog_id:
             new_progression = Progression.objects.get(id=prog_id)
             new_progression.IsActive = True
             new_progression.save()
+            old_progression.IsActive = False
+            old_progression.save()
         else:
-            language = Language.objects.get(NameEng=lang)
-            new_progression = Progression.objects.create(
-                UserId=custom_user,
-                LangId=language,
-                Level=0,
-                Points=0,
-                WordsLearnt=[0],
-                Exelearnt=[0],
-                FunFacts=[0]
-            )
-        old_progression.IsActive = False
-        old_progression.save()
+            #Rule : Level 2 for 2 progressions, level 5 for 3 progressions
+            nb_prog = Progression.objects.filter(UserId=custom_user.id).count()
+            if (nb_prog == 1 and old_progression.Level < 2) or (nb_prog > 1 and old_progression.Level < 5):
+                message = "Oops, yu can't do that ! You must reach level 2 to activate a second language, and level 5 to activate a third language."
+            else:
+                language = Language.objects.get(NameEng=lang)
+                new_progression = Progression.objects.create(
+                    UserId=custom_user,
+                    LangId=language,
+                    Level=0,
+                    Points=0,
+                    WordsLearnt=[0],
+                    Exelearnt=[0],
+                    FunFacts=[0]
+                )
+                old_progression.IsActive = False
+                old_progression.save()
 
     context = {
         'lang':lang,
+        'message':message
     }
     return render(request, 'learn/home.html', context)
 
@@ -189,6 +207,8 @@ def home(request):
 def stats(request):
     user = request.user
     custom_user = Usercustom.objects.get(user=user)
+    progression=Progression.objects.get(UserId=custom_user, IsActive=True)
+    lang=progression.LangId
 
     print('Recherche des prog pour user.Username, avec id:{0}'.format(custom_user.id))
     progressions = Progression.objects.filter(UserId=custom_user.id).order_by('IsActive').reverse()
@@ -208,7 +228,8 @@ def stats(request):
         print(prog.UserId)
 
     context={
-        'progressions':progressions_list
+        'progressions':progressions_list,
+        'lang':lang
     }
     return render(request, 'learn/stats.html', context)
 
@@ -228,11 +249,11 @@ def voc(request):
 
     lang_id = progression.LangId.id
     if lang_id == 1:
-        lang = "jp"
+        lang = "Japanese"
     elif lang_id == 3:
-        lang = "fr"
+        lang = "French"
     elif lang_id == 4:
-        lang = "ru"
+        lang = "Russian"
     else:
         message ="Error. No language selected"
 
@@ -250,19 +271,19 @@ def voc(request):
     for thm in themes_list:
         words_sublist = []
         for wrd in thm.words.all():
-            if lang == 'jp':
+            if lang == 'Japanese':
                 try:
                     wrdjp = Wordjp.objects.filter(NameEng = wrd.id).get()
                     words_sublist.append(wrdjp)
                 except:
                     print('The word {0} has no correspondant in {1}'.format(wrd,lang))
-            elif lang == 'fr':
+            elif lang == 'French':
                 try:
                     wrdfr = Wordfr.objects.filter(NameEng = wrd.id).get()
                     words_sublist.append(wrdfr)
                 except:
                     print('The word {0} has no correspondant in {1}'.format(wrd,lang))
-            elif lang == 'ru':
+            elif lang == 'Russian':
                 try:
                     wrdru = Wordru.objects.filter(NameEng = wrd.id).get()
                     words_sublist.append(wrdru)
@@ -553,174 +574,3 @@ def quizz(request):
         }
 
     return render(request, 'learn/launch_quizz.html', context)
-
-
-
-
-"""
-@login_required(login_url='/learn/')
-def quizz(request):
-    user = request.user
-    custom_user = Usercustom.objects.get(user=user)
-    progression = Progression.objects.get(UserId=custom_user, IsActive=True)
-    lang = progression.LangId.NameEng
-
-    started = request.POST.get('started')
-
-    if not started:
-        context = {
-            'lang': lang
-        }
-        return render(request, 'learn/quizz.html', context)
-    
-    
-
-
-    launch = request.POST.get('launch')
-    check = request.POST.get('check')
-    score = request.POST.get('score')
-    total = request.POST.get('number')
-    if total:
-        total = int(total)
-    end = request.POST.get('end')
-    mode = request.POST.get('mode')
-    word_list = request.POST.get('word_list')
-    if word_list:
-        word_list = word_list.split(',')
-    responses = request.POST.get('responses')
-
-    print('Nouvelle liste récupéreé')
-    print(word_list)
-
-    print('En mode liste')
-    print(word_list)
-
-    if check:
-        cur_word = request.POST.get('cur_word')
-        response = request.POST.get('response')
-
-
-        if response == cur_word:
-            message = 'Nice one !'
-        else:
-            message = 'OOps, wrong answer.'
-
-        context = {
-            'lang': lang,
-            'score': score,
-            'total': total,
-            'mode': mode,
-            'word_list': word_list,
-            'cur_word': cur_word,
-            'responses': responses,
-            'button' : 'Next',
-            'message' : message
-        }
-        return render(request, 'learn/launch_quizz.html', context)
-
-    if end:
-        user = request.user
-        custom_user = Usercustom.objects.get(user=user)
-        progression = Progression.objects.get(UserId=custom_user, IsActive=True)
-
-        return render(request, 'learn/home.html')
-
-
-    if launch:
-        #num = request.POST.get('number')
-        #mode = request.POST.get('mode')
-
-    #Don't know what to do with this...
-        class Quizz():
-
-            def __init__(self, lg, md, nb):
-                self.lg = lg
-                self.md = md
-                self.nb = nb
-                self.score = 0
-                self.word_list = []
-
-                if lg == 'Japanese':
-                    word_list = [word for word in Wordjp.objects.all()]
-                    word_list = random.choice(word_list, self.nb)
-                if lg == 'French':
-                    word_list = [word for word in Wordfr.objects.all()]
-                    word_list = random.choice(word_list, self.nb)
-                if lg == 'Russian':
-                    word_list = [word for word in Wordru.objects.all()]
-                    word_list = random.choice(word_list, self.nb)
-
-            def check_answer(self):
-                return 'checked'
-            def next_word(self):
-                self.nb += 1
-                return self.word_list[self.nb]
-        
-        new_quizz = Quizz(lang, mode, num)
-        
-    
-        score = 0
-        if lang == 'Japanese':
-            word_list_total = [word for word in Wordjp.objects.all()]
-            word_list = []
-            #word_list = random.choice(word_list, total)
-            for i in range(0,total):
-                ind = random.randint(0,len(word_list_total)-1)
-                word_list.append(word_list_total[ind])
-                word_list_total.pop(ind)
-
-        if lang == 'French':
-            word_list = [word for word in Wordfr.objects.all()]
-            word_list = random.choice(word_list, total)
-        if lang == 'Russian':
-            word_list = [word for word in Wordru.objects.all()]
-            word_list = random.choice(word_list, total)
-        print('Inital word list :')
-        print(word_list)
-
-
-
-
-    cur_word = word_list.pop(random.randint(0,total-1))
-
-
-
-    if lang == 'Japanese':
-        responses_total = word_list
-        responses = []
-        for i in range(0,3):
-            #responses.append(cur_word)
-            ind = random.randint(0,len(word_list)-1)
-            responses.append(word_list[ind])
-        ind = random.randint(0,len(responses))
-        responses.insert(ind, cur_word)
-
-    if lang == 'French':
-        responses = [word for word in Wordfr.objects.all()]
-        responses.append(cur_word)
-        responses = random.choice(word_list, 4)
-    if lang == 'Russian':
-        responses = [word for word in Wordru.objects.all()]
-        responses.append(cur_word)
-        responses = random.choice(word_list, 4)
-
-    print('Responses :')
-    print(responses)
-
-
-    context = {
-        'lang': lang,
-        'score': score,
-        'total': total,
-        'mode': mode,
-        'word_list': word_list,
-        'responses': responses,
-        'button' : 'Confirm',
-        'cur_word':cur_word
-    }
-    return render(request, 'learn/launch_quizz.html', context)
-    """
-
-
-
-

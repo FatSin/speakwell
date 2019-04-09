@@ -4,32 +4,22 @@
 
 {% load static %}
 
-<HTML>
-    <head>
-        <title>Listen and learn</title>
-        <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
-    </head>
-
-    <body>
-        <header>Welcome to SpeakWell</header>
-        <hr>
-        <content>
-            <form action="/learn/quizz/" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="lang" value="{{lang}}" method="post">
-                <input type="hidden" name="launch" value="1" method="post">
-                <input type="hidden" name="started" value="1" method="post">
-
-                Number of words (10-99): <input type="text" name="number" method="post">
-                Mode :<br>
-                Recognition: <input type="radio" name="mode" value="rec" method="post">
-                Inverted recognition: <input type="radio" name="mode" value="inv_rec" method="post">
-                <input class="big-button" type="submit" value="Launch !" method="post">
-            </form>
-        </content>
-        <hr>
-        <footer>Designed by OC</footer>
-        <script></script>
-    </body>
+<div>
+    <p>New Quizz</p>
+    <form action="/learn/quizz/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="lang" value="{{lang}}" method="post">
+        <input type="hidden" name="launch" value="1" method="post">
+        <input type="hidden" name="started" value="1" method="post">
+        <br>
+        Number of words (10-99): <input type="text" name="number" method="post">
+        <p style="font-size: initial;">Mode :</p>
+        <br>
+        Recognition: <input type="radio" name="mode" value="rec" method="post">
+        Inverted recognition: <input type="radio" name="mode" value="inv_rec" method="post">
+        <br><br>
+        <input class="big-button" type="submit" value="Launch !" method="post">
+    </form>
+</div>
 
 {% endblock %}

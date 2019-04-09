@@ -18,7 +18,7 @@
                 <form action="/learn/submit_form/" method="post">
                     {% csrf_token %}
                     Username <input type="text" name="username" method="post" required> <br>
-                    Password  <input type="text" name="password" method="post" required> (8 characters minimum)<br>
+                    Password  <input type="password" name="password" method="post" required> (8 characters minimum)<br>
                     Email <input type="text" name="email" method="post" required> <br>
                     Display language <input type="text" name="lang-display" method="post" required> <br>
                     <input type="hidden" name="lang" value="{{ lang }}" method="post">

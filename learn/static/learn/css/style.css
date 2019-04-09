@@ -1,6 +1,6 @@
 #body-index {
     /*background-color:#b4b7e2;*/
-    background-image:url('../img/night2.jpg');
+    background-image:url('../img/day1.jpg');
     background-size:cover;
     color:white;
 }
@@ -51,9 +51,24 @@
 
 
 
-#body-jp {
-    background-image:url('../img/fond-jp1.jpg');
-    background-size:cover;
+#body-Japanese {
+    background-image:url('../img/fond-jp3.jpg');
+    background-size:100% 100%;
+    background-attachment: fixed;
+    color:black;
+}
+
+#body-French {
+    background-image:url('../img/eiffel.jpg');
+    background-size:100% 115%;
+    background-attachment: fixed;
+    color:black;
+}
+
+#body-Russian {
+    background-image:url('../img/russia2.jpg');
+    background-size:100% 100%;
+    background-attachment: fixed;
     color:black;
 }
 
@@ -62,15 +77,31 @@ content {
     display: flex;
 }
 
+hr {
+    border-color: #cdc7c7;
+    width: 50%;
+}
+
+.register-field {
+    margin:auto;
+    text-align: left;
+
+}
+
 #themelist {
-    text-align: center;
+    /*text-align: center;
     background: #d3dde6;
     border-radius: 0.2em;
+    padding: 10px;*/
+    background: #fffefe;
+    border-radius: 0.1em;
     padding: 10px;
+    border: solid 1px #cdc7c7;
+    box-shadow: 3px 3px #e5e1e1;
 }
 
 #themelist a {
-    color:#5a6064;
+    color:black;
     text-decoration:none;
 }
 
@@ -96,15 +127,57 @@ content div p {
 
 .details{
     display:flex;
+    justify-content: space-evenly;
+    margin: auto;
+    padding: 1% 0 0 0;
+    width:70%;
+}
+
+.details-up {
+    width:100%;
 }
 
 .details a{
-    color:black;
+    color:#fffafa;
     text-decoration:none;
+}
+
+.word-en {
+    color: #706da0;
+    font-weight: bold;
+}
+
+li {
+    font-size: 1.3em;
+    list-style-type: none;
 }
 
 li span{
     margin-right:5px;
+}
+
+.listen {
+    color: #393535;
+    border: solid 1px #9b9898;
+    border-radius: 0.2em;
+    padding: 0% 2% 0 2%;
+    background: #8e8989;
+    font-size: 0.9em;
+    margin-bottom: 8.5%;
+    box-shadow: 1px 1px #e5e1e1;
+}
+
+.repeat {
+    color: #fffafa;
+    border: solid 1px #9b9898;
+    border-radius: 0.2em;
+    padding: 0% 9% 2% 9%;
+    background: #c87070;
+    font-size: 0.9em;
+    margin-bottom: 3%;
+    box-shadow: 1px 1px #e5e1e1;
+    font-family: sans;
+    cursor: pointer;
 }
 
 .big-button {
@@ -121,9 +194,17 @@ li span{
     color: #524e4e;
 }
 
+.lang-stats {
+    background: #fffefe;
+    border-radius: 0.2em;
+    padding: 10px;
+    border: solid 1px #cdc7c7;
+    box-shadow: 3px 3px #e5e1e1;
+}
 
 footer {
     text-align:center;
     font-weight:bold;
     color:white;
+    margin-top: 5%;
 }

@@ -5,6 +5,7 @@
 {% load static %}
 {% load learn_tags %}
 
+<div>
 
     <!--
     <div>You are learning {{ lang }}</div>
@@ -18,7 +19,6 @@
         <p>Encore un thème</p>
     {% endfor %}
     -->
-    <p>Words done : {{words_done}}</p>
     <p id="themelist">
     {% for theme in words_list %}
         <a href="#{{ theme.0 }}">{{ theme.0 }}</a>
@@ -26,88 +26,97 @@
     {% endfor %}
     </p>
 
-    <hr>
 
     {% for theme in words_list %}
         <p id="{{ theme.0 }}" style="font-weight:bold;">{{ theme.0 }}</p>
 
         {% for word in theme.1 %}
             <ul>
-                {% if lang == 'jp' %}
-                <li><span>{{ word.NameEng.NameEng }}</span><span>{{word.NameHira}} </span>
-                    <span>{{word.NameKata}} </span>
-                    <span>{{word.NameKanji}} </span>
+                {% if lang == 'Japanese' %}
+                <li><div class="details details-up" style="margin-bottom: -4%;">
+                        <span class="word-en">{{ word.NameEng.NameEng }}</span>
+                        <span>{{word.NameHira}} </span>
+                        <span>{{word.NameKata}} </span>
+                        <span>{{word.NameKanji}} </span>
+                    </div>
                     <br>
-                    <p class="details">
+                    <div class="details" style="margin-bottom: 6%;">
                         {%  getfilejp word.NameEng.NameEng as file %}
                         <!--<p>The associated file is {{ file }}</p>-->
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
-                        <a href="{% static file %}" style="color: black;" target="_blank" >Listen</a>
+                        <a href="{% static file %}" class="listen" target="_blank" >Listen</a>
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
                             <input type="hidden" name="lang" value="jp" method="post">
                             <input type="hidden" name="word_eng" value="{{word.NameEng.NameEng}}" method="post">
                             <input type="hidden" name="word_hira" value="{{word.NameHira}}" method="post">
                             <input type="hidden" name="word_kanji" value="{{word.NameKanji}}" method="post">
-                            <input class="small-button" type="submit" value="Repeat" method="post">
+                            <input class="repeat" type="submit" value="Repeat" method="post">
                         </form>
                         {% if word.id in words_done  %}
-                        <img src="{% static 'learn/img/green-button.png' %}" width="20px">
+                        <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;height: 10%;">
                         {% else %}
-                        <img src="{% static 'learn/img/grey-button.png' %}" width="20px">
+                        <img src="{% static 'learn/img/grey-button.png' %}" style="width: 10%;height: 10%;">
                         {% endif %}
-                        </p>
+                        </div>
                     </li>
 
-                {% elif lang == 'fr' %}
-                <li><span>{{ word.NameEng.NameEng }}</span><span>{{word.Name}} </span>
+                {% elif lang == 'French' %}
+                <li>
+                    <div class="details details-up" style="margin-bottom: -4%;">
+                        <span>{{ word.NameEng.NameEng }}</span>
+                        <span>{{word.Name}} </span>
+                    </div>
                     <br>
-                    <p class="details">
+                    <div class="details" style="margin-bottom: 6%;">
                         {%  getfilefr word.NameEng.NameEng as file %}
                         <!--<p>The associated file is {{ file }}</p>-->
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
-                        <a href="{% static file %}" style="color: black;" target="_blank" >Listen</a>
+                        <a href="{% static file %}" class="listen" target="_blank" >Listen</a>
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
                             <input type="hidden" name="lang" value="jp" method="post">
                             <input type="hidden" name="word_eng" value="{{word.NameEng.NameEng}}" method="post">
                             <input type="hidden" name="word_fr" value="{{word.Name}}" method="post">
-                            <input class="small-button" type="submit" value="Repeat" method="post">
+                            <input class="repeat" type="submit" value="Repeat" method="post">
                         </form>
                         {% if word.id in words_done  %}
-                        <img src="{% static 'learn/img/green-button.png' %}" width="20px">
+                        <img src="{% static 'learn/img/green-button.png' %}"  style="width: 10%;height: 10%;">
                         {% else %}
-                        <img src="{% static 'learn/img/grey-button.png' %}" width="20px">
+                        <img src="{% static 'learn/img/grey-button.png' %}"  style="width: 10%;height: 10%;">
                         {% endif %}
-                        </p>
-                    </li>
+                    </div>
+                </li>
 
 
-                {% elif lang == 'ru' %}
-                <li><span>{{ word.NameEng.NameEng }}</span>
-                    <span>{{word.NameRu}} </span>
-                    <span>{{word.NameRoma}} </span>
+                {% elif lang == 'Russian' %}
+                <li>
+                    <div class="details details-up" style="margin-bottom: -4%;">
+                        <span>{{ word.NameEng.NameEng }}</span>
+                        <span>{{word.NameRu}} </span>
+                        <span>{{word.NameRoma}} </span>
+                    </div>
                     <br>
-                    <p class="details">
+                    <div class="details" style="margin-bottom: 6%;">
                         {%  getfileru word.NameEng.NameEng as file %}
                         <!--<p>The associated file is {{ file }}</p>-->
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
-                        <a href="{% static file %}" style="color: black;" target="_blank" >Listen</a>
+                        <a href="{% static file %}" class="listen" target="_blank" >Listen</a>
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
                             <input type="hidden" name="lang" value="jp" method="post">
                             <input type="hidden" name="word_eng" value="{{word.NameEng.NameEng}}" method="post">
                             <input type="hidden" name="word_ru" value="{{word.NameRu}}" method="post">
                             <input type="hidden" name="word_roma" value="{{word.NameRoma}}" method="post">
-                            <input class="small-button" type="submit" value="Repeat" method="post">
+                            <input class="repeat" type="submit" value="Repeat" method="post">
                         </form>
                         {% if word.id in words_done  %}
-                        <img src="{% static 'learn/img/green-button.png' %}" width="20px">
+                        <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;height: 10%;">
                         {% else %}
-                        <img src="{% static 'learn/img/grey-button.png' %}" width="20px">
+                        <img src="{% static 'learn/img/grey-button.png' %}" style="width: 10%;height: 10%;">
                         {% endif %}
-                        </p>
-                    </li>
+                    </div>
+                </li>
 
                 {% endif %}
 

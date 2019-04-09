@@ -4,43 +4,31 @@
 
 {% load static %}
 
-<HTML>
-    <head>
-        <title>Listen and learn</title>
-        <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
-    </head>
+<div>
 
-    <body>
-        <header>Welcome to SpeakWell</header>
-        <hr>
-        <content>
-            <p>Quizz mode : {{mode}}</p><br>
-            <p>Language : {{lang}}</p><br>
-            <p>Score : {{score}}/{{total}}</p><br>
-            <form action="/learn/quizz/" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="lang" value="{{lang}}" method="post">
-                <input type="hidden" name="started" value="1" method="post">
-                {% if button == 'Confirm' %}
-                <input type="hidden" name="check" value="1" method="post">
+    <p>Quizz mode : {{mode}}</p><br>
+    <p>Language : {{lang}}</p><br>
+    <p>Score : {{score}}/{{total}}</p><br>
+    <form action="/learn/quizz/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="lang" value="{{lang}}" method="post">
+        <input type="hidden" name="started" value="1" method="post">
+        {% if button == 'Confirm' %}
+        <input type="hidden" name="check" value="1" method="post">
 
-                <input type="hidden" name="cur_word" value="{{cur_word.NameEng}}" method="post">
-                <input type="hidden" name="word_list" value="{{word_list}}" method="post">
-                <input type="hidden" name="responses" value="{{responses}}" method="post">
-                <p>What is this word ? : {{cur_word.NameHira}}</p><br>
-                {{responses.0.NameEng}} <input type="radio" name="response" value="{{responses.0.NameEng}}" method="post"><br>
-                {{responses.1.NameEng}} <input type="radio" name="response" value="{{responses.1.NameEng}}" method="post"><br>
-                {{responses.2.NameEng}} <input type="radio" name="response" value="{{responses.2.NameEng}}" method="post"><br>
-                {{responses.3.NameEng}} <input type="radio" name="response" value="{{responses.3.NameEng}}" method="post"><br>
-                {% endif %}
+        <input type="hidden" name="cur_word" value="{{cur_word.NameEng}}" method="post">
+        <input type="hidden" name="word_list" value="{{word_list}}" method="post">
+        <input type="hidden" name="responses" value="{{responses}}" method="post">
+        <p>What is this word ? : {{cur_word.NameHira}}</p><br>
+        {{responses.0.NameEng}} <input type="radio" name="response" value="{{responses.0.NameEng}}" method="post"><br>
+        {{responses.1.NameEng}} <input type="radio" name="response" value="{{responses.1.NameEng}}" method="post"><br>
+        {{responses.2.NameEng}} <input type="radio" name="response" value="{{responses.2.NameEng}}" method="post"><br>
+        {{responses.3.NameEng}} <input type="radio" name="response" value="{{responses.3.NameEng}}" method="post"><br>
+        {% endif %}
 
-                <input class="big-button" type="submit" value="{{button}}" method="post">
+        <input class="big-button" type="submit" value="{{button}}" method="post">
 
-            </form>
-        </content>
-        <hr>
-        <footer>Designed by OC</footer>
-        <script></script>
-    </body>
+    </form>
+</div>
 
 {% endblock %}

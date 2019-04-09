@@ -6,7 +6,7 @@
         <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
     </head>
 
-    <body id="body-jp">
+    <body id="body-{{lang}}">
         <header>
             <div id="banner">
                 <div>
@@ -24,10 +24,6 @@
 
 
         <content>
-
-            <div>
-                <p>You are learning {{ lang }}, {{ message }}.</p>
-                <p>Hello, {{ user.username }}</p>
 
             {% block content%}{% endblock %}
 

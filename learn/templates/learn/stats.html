@@ -4,19 +4,22 @@
 
 {% load static %}
 
+<div>
+
 <p>Here is your progression</p>
 
 {% for prog in progressions %}
 
 
     <p>
-        <p>Language: {{prog.LangId}}</p>
-        <p>Progid: {{prog.id}}</p>
-        <p>LEVEL : {{prog.Level}}</P>
-        <p>Points : {{prog.Points}}</P>
-        <p>Words completed : {{prog.WordsLearnt}}</p>
-        <p>Exercises completed : {{prog.Exelearnt}}</p>
-        <p>Facts unblocked : {{prog.FunFacts}} </p>
+        <p class="lang-stats">
+            Language: {{prog.LangId}}<br><br>
+            <!--Progid: {{prog.id}}<br>-->
+            Level : {{prog.Level}}<br><br>
+            Points : {{prog.Points}}<br><br>
+            Words completed : {{prog.WordsLearnt}}<br><br>
+            Exercises completed : {{prog.Exelearnt}}<br><br>
+            Facts unblocked : {{prog.FunFacts}} <br><br>
 
         <br>
         {% if prog.IsActive != True %}
@@ -29,6 +32,7 @@
                     <input class="big-button" type="submit" value="Activate this language" method="post">
         </form>
         {% endif %}
+        </p>
     </p>
 {% endfor %}
 
