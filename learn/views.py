@@ -17,9 +17,6 @@ from .record_streaming import print_from_mp3
 
 # Create your views here.
 
-
-
-
 def index(request):
     user = request.user
     if user.is_authenticated:
@@ -109,23 +106,30 @@ def submit_form_html(request):
     lang_dis = request.POST.get('lang-display')
 
     if create_user:
-        new_user = User.objects.create_user(username, email, password)
-        language = Language.objects.get(NameEng=lang)
+        check_user = User.objects.filter(username=username).count()
+        if check_user > 0:
+            message = "User {0} already exists.".format(username)
+            context = {
+                'message': message
+            }
+            return render(request, 'learn/index.html', context)
+        else:
+            new_user = User.objects.create_user(username, email, password)
+            language = Language.objects.get(NameEng=lang)
 
-        #language = Language.objects.get(NameEng=lang)
-        language_dis = Language.objects.get(NameEng=lang_dis)
-        customu = Usercustom.objects.create(user=new_user, LangDisplay=language_dis)
-        #Create a progression in the selected language
-        new_progression = Progression.objects.create(
-            UserId=customu,
-            LangId =language,
-            Level=0,
-            Points=0,
-            WordsLearnt=[0],
-            Exelearnt=[0],
-            FunFacts=[0]
-            )
-
+            #language = Language.objects.get(NameEng=lang)
+            language_dis = Language.objects.get(NameEng=lang_dis)
+            customu = Usercustom.objects.create(user=new_user, LangDisplay=language_dis)
+            #Create a progression in the selected language
+            new_progression = Progression.objects.create(
+                UserId=customu,
+                LangId =language,
+                Level=0,
+                Points=0,
+                WordsLearnt=[0],
+                Exelearnt=[0],
+                FunFacts=[0]
+                )
 
     user = authenticate(username=username, password=password)
 

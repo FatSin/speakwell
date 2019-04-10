@@ -21,11 +21,11 @@
                     <input type="hidden" name="create-user" value="1" method="post"> <br><br>
                     <div class="register-field">
                         <label for="username">Username</label>
-                        <input type="text" name="username" method="post" required>
+                        <input type="text" name="username" method="post" minlength="3" maxlength="20" required>
                     </div>
                     <div class="register-field">
                         <label for="password">Password</label>
-                        <input type="password" name="password" method="post" required>(8 characters minimum)
+                        <input type="password" name="password" method="post" minlength="8" maxlength="20" required>(8 characters minimum)
                     </div>
                     <div class="register-field">
                         <label for="email">Email</label>
