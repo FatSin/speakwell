@@ -12,10 +12,10 @@
         <input type="hidden" name="launch" value="1" method="post">
         <input type="hidden" name="started" value="1" method="post">
         <br>
-        Number of words (10-99): <input type="text" name="number" method="post">
+        Number of words (10-99): <input type="text" name="number" method="post" min="10">
         <p style="font-size: initial;">Mode :</p>
         <br>
-        Recognition: <input type="radio" name="mode" value="rec" method="post">
+        Recognition: <input type="radio" name="mode" value="rec" method="post" checked="checked">
         Inverted recognition: <input type="radio" name="mode" value="inv_rec" method="post">
         <br><br>
         <input class="big-button" type="submit" value="Launch !" method="post">
