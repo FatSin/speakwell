@@ -11,3 +11,12 @@ function formValidate() {
         return false;
     }
 }
+
+
+
+function playAudio(filename) {
+    var audio;
+    audio = document.getElementById(filename);
+    console.log(filename);
+    audio.play();
+}

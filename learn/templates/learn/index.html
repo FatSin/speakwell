@@ -57,14 +57,15 @@
             <div style="width: 1%;padding-top: 5%;background:none;color:white;font-size: 1.5em;margin: 5% 2% 2% 0;">OR</div>
 
             <div style="margin-top: 6%;height: 3%;width: 25%;">
-            <form id="form-index" action="/learn/submit_form_html/" onsubmit="return formValidate()" method="post">
-                {% csrf_token %}
-                LOG IN<br><br>
-                <input type="hidden" name="lang" value="jp" method="post">
-                Username <input type="text" name="username" method="post" minlength="3" maxlength="20" required> <br><br>
-                Password  <input type="password" name="password" method="post"  minlength="8" maxlength="20" required><br><br>
-                <input class="big-button" type="submit" value="Continue" method="post">
-            </form>
+            <!--<form id="form-index" action="/learn/submit_form_html/" onsubmit="return formValidate()" method="post">-->
+                <form id="form-index" action="/learn/submit_form_html/" method="post">
+                    {% csrf_token %}
+                    LOG IN<br><br>
+                    <input type="hidden" name="lang" value="jp" method="post">
+                    Username <input type="text" name="username" method="post" minlength="3" maxlength="20" required> <br><br>
+                    Password  <input type="password" name="password" method="post"  minlength="8" maxlength="20" required><br><br>
+                    <input class="big-button" type="submit" value="Continue" method="post">
+                </form>
                 <p id="form-error"></p>
 
             </div>

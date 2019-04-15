@@ -44,7 +44,9 @@
                         {%  getfilejp word.NameEng.NameEng as file %}
                         <!--<p>The associated file is {{ file }}</p>-->
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
-                        <a href="{% static file %}" class="listen" target="_blank" >Listen</a>
+                        <!-- génial : <a href="{% static file %}" class="listen" target="_blank" >Listen</a>-->
+                        <a href="#" class="listen" onclick="playAudio('{{file}}');return false;">Listen</a>
+                        <audio id="{{file}}" src="{% static file %}" >Listen</audio>
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
                             <input type="hidden" name="lang" value="jp" method="post">
