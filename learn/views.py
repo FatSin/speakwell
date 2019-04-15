@@ -1,5 +1,3 @@
-import tkinter as tk
-
 import os, sys, random
 
 from django.shortcuts import render
@@ -367,6 +365,9 @@ def record(request):
         message = "Oops, you did not pronounce {0} well. Did you mean {1} ?".format(word_hira, data[0])
 
 
+    """
+    #With tkinter
+    import tkinter as tk
 
     class Winconfig:
         def __init__(self, wind):
@@ -413,6 +414,19 @@ def record(request):
 
     #return render(request, 'learn/voc.html', context)
     return voc(request)
+    """
+
+    img_ref_link = "learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"
+    img_user_link = "learn/fig/testcloud.png"
+
+    context = {
+        'message' : message,
+        'img_ref_link': img_ref_link,
+        'img_user_link': img_user_link
+    }
+
+    return render(request, 'learn/evaluate.html', context)
+
 
 
 @login_required(login_url='/learn/')

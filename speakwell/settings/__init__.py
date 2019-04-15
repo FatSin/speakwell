@@ -19,6 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ivso6a3n)0d^v+pm01c^8qgh!7(gewg8sei0p$fazgigha&2yb'
 
@@ -26,6 +27,20 @@ SECRET_KEY = 'ivso6a3n)0d^v+pm01c^8qgh!7(gewg8sei0p$fazgigha&2yb'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'testserver']
+
+
+DATABASES = {
+    'default': {
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
+        'NAME': 'speakwell', # le nom de notre base de donnees creee precedemment
+        'USER': 'speakwell', # attention : remplacez par votre nom d'utilisateur
+        'PASSWORD': 'speakwell',
+        'HOST': '',
+        'PORT': '5432',
+    }
+}
 
 
 # Application definition
@@ -76,18 +91,6 @@ WSGI_APPLICATION = 'speakwell.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
-        'NAME': 'speakwell', # le nom de notre base de donnees creee precedemment
-        'USER': 'speakwell', # attention : remplacez par votre nom d'utilisateur
-        'PASSWORD': 'speakwell',
-        'HOST': '',
-        'PORT': '5432',
-    }
-}
 
 
 # Password validation
