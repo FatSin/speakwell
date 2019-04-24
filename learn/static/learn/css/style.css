@@ -171,6 +171,20 @@ li span{
     color: #fffafa;
     border: solid 1px #9b9898;
     border-radius: 0.2em;
+    padding: 0% 2% 0 2%;
+    background: #c87070;
+    font-size: 0.9em;
+    margin-bottom: 8.5%;
+    box-shadow: 1px 1px #e5e1e1;
+    font-family: sans;
+    cursor: pointer;
+}
+
+/*
+.repeat {
+    color: #fffafa;
+    border: solid 1px #9b9898;
+    border-radius: 0.2em;
     padding: 0% 9% 2% 9%;
     background: #c87070;
     font-size: 0.9em;
@@ -179,7 +193,7 @@ li span{
     font-family: sans;
     cursor: pointer;
 }
-
+*/
 .big-button {
     font-size: 20px;
     border-radius: 0.2em;

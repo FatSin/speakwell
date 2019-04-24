@@ -57,8 +57,8 @@
                             <input class="repeat" type="submit" value="Repeat" method="post">
                         </form>
                         -->
-                        <button id="start-{{word.NameEng.NameEng}}" onclick="recordAudio('{{word.NameEng.NameEng}}','jp','{{word.NameHira}}', '{{word.NameKanji}}');">Start recording</button>
-                        <button id="stop-{{word.NameEng.NameEng}}">Stop</button>
+                        <button class="repeat" id="start-{{word.NameEng.NameEng}}" onclick="recordAudio('{{word.NameEng.NameEng}}','jp','{{word.NameHira}}', '{{word.NameKanji}}');">Repeat</button>
+                        <button class="repeat" id="stop-{{word.NameEng.NameEng}}">Stop</button>
 
                         {% if word.id in words_done  %}
                         <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;height: 10%;">
