@@ -102,6 +102,7 @@ function recordAudio(word, lang, wordinlang, word2) {
                     console.log(xhr2.responseText);
                     //document.getElementById('div-voc').innerHTML = xhr2.responseText;
                     document.body.innerHTML = xhr2.responseText;
+                    document.body.setAttribute('style','background:white;');
                 };
                 xhr2.send(parameters);
             }

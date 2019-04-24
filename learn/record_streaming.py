@@ -94,6 +94,9 @@ def print_from_mp3(word, lang, is_from_mic):
     s.plot(amplitude)
     #Only display positive y-values
     s.set_ylim(bottom=0.)
+    s.set_xticklabels([])
+    s.set_yticklabels([])
+    s.set_xlabel('You are here')
     fig.savefig(fig_path)
 
 

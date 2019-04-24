@@ -372,7 +372,7 @@ def record(request):
     if (word_hira in data[0]) or (word_kanji in data[0]):
     #data[1] = 81 #Test
     #if word_in: #Test
-        message = "Congratulations, you pronounced {0} for {1} with a score of {2}".format(word_hira, data[0], score)
+        message = "Congratulations, you pronounced {0} for {1} with a score of {2}%".format(word_hira, data[0], score)
         if int(score) >= 80:
             word_id = Wordjp.objects.get(NameHira=word_hira).id
             progression = Progression.objects.get(UserId=custom_user.id, LangId=1)
@@ -424,21 +424,21 @@ def record(request):
         </head>
         <body>
         
-        <p>"""+message+"""
+        <p style="text-align:center;font-size:x-large;">"""+message+"""
         </p>
-        <br>
+        <p style="text-align:center;font-size:x-large;">
+        <a href="/learn/voc/" style="color:black;">Back</a>
+        </p>
         <div>
         <img src='
         """+img_ref_link+"""
-        ' style="width: 45%;height: 100%;">
+        ' style="width: 35%;height: 75%;">
         <img src='
         """+img_user_link+"""
-        ' style="width: 45%;height: 100%;">
+        ' style="width: 35%;height: 75%;">
         </div>
         
-        <div>
-        <a href="/learn/voc/">Back</a>
-        </div>
+        
         
         </body>
         </html>
