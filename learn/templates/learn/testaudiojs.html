@@ -1,0 +1,29 @@
+{% load static %}
+
+<HTML>
+    <head>
+        <title>Listen and learn</title>
+    </head>
+
+    <body id="div-voc" >
+    <p>We're gonna record</p>
+    <p>{{message}}</p>
+        <input type="file" accept="audio/*" capture id="recorder">
+        <audio id="audio" controls></audio>
+
+
+        <a id="download">Download</a>
+        <button id="start" onclick="recordAudio();">Start recording</button>
+        <button id="stop">Stop</button>
+
+        
+
+        <audio id="audio2" controls></audio>
+
+
+    <script src="{% static 'learn/js/dascript.js' %}">
+
+
+    </script>
+
+    </body>

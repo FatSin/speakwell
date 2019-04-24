@@ -1,9 +1,11 @@
-import os, sys, random
+import os, sys, random, json
 
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+
 #from PIL import Image, ImageTk
 
 from .models import Usercustom, Language, Word, Wordjp, Wordfr, Wordru, Progression, Theme, Quizz
@@ -11,9 +13,14 @@ from .models import Usercustom, Language, Word, Wordjp, Wordfr, Wordru, Progress
 from .forms import RegisterForm
 
 from .record_streaming import main as rec
+from .record_streaming import recognition_from_file as recfile
 from .record_streaming import print_from_mp3
 
 # Create your views here.
+def testaudiojs(request):
+    return render(request, 'learn/testaudiojs.html')
+
+
 
 def index(request):
     user = request.user
@@ -324,20 +331,41 @@ def record(request):
 
     user = request.user
     custom_user = Usercustom.objects.get(user=user)
-    lang = request.POST.get('lang')
-    word_eng = request.POST.get('word_eng')
-    word_hira = request.POST.get('word_hira')
-    word_kanji = request.POST.get('word_kanji')
+    print(str(request.body))
+    resp = request.body.decode().split(',')
+    print(resp)
+    word_eng = resp[0]
+    lang = resp[1]
+    word_hira = resp[2]
+    word_kanji = resp[3]
+    #lang = request.POST.get('lang')
+    #word_eng = request.POST.get('word_eng')
+    #word_hira = request.POST.get('word_hira')
+    #word_kanji = request.POST.get('word_kanji')
+
+    print(lang)
+    print(word_eng)
+    print(user)
+    print(request.POST)
+    print(request.body)
+
+
 
     filename = "learn/static/learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"
+    audio_file = "learn/static/learn/audio/user.mp3"
 
     if not os.path.exists(filename):
         print('Graph not found for this audio file. Creating it')
-        print_from_mp3(word_eng, lang)
+        print_from_mp3(word_eng, lang, False)
 
+    print_from_mp3(word_eng, lang, True)
 
-    data = rec()
+    if lang == 'jp':
+        lang_code = Language.objects.get(NameEng='Japanese').Code
 
+    data = recfile(audio_file, lang_code)
+    print(data)
+    #data = rec()
 
     score = data[1][:2]
 
@@ -365,68 +393,71 @@ def record(request):
         message = "Oops, you did not pronounce {0} well. Did you mean {1} ?".format(word_hira, data[0])
 
 
-    """
-    #With tkinter
-    import tkinter as tk
-
-    class Winconfig:
-        def __init__(self, wind):
-            frame = tk.Frame(wind)
-            frame.pack()
-
-            fig_ref = Image.open("learn/static/learn/fig/"+lang+"/"+word_eng+"-"+lang+".png")
-            fig_mic = Image.open("learn/static/learn/fig/testcloud.png")
-            self.photo_ref = ImageTk.PhotoImage(fig_ref, master=wind)
-            self.photo_mic = ImageTk.PhotoImage(fig_mic, master=wind)
-
-            msg = tk.Message(wind, text=message)
-            msg.pack()
-
-            self.button = tk.Button(frame, text="OK", command=frame.quit)
-            self.button.pack(side=tk.BOTTOM)
-
-            canvas = tk.Canvas(wind, width=fig_ref.size[0]*2, height=fig_ref.size[1])
-            canvas.create_image(0,0, anchor=tk.NW, image=self.photo_ref)
-            canvas.create_image(fig_ref.size[0],0, anchor=tk.NW, image=self.photo_mic)
-            #canvas.create_image(0, 0, image=self.photo_ref)
-            canvas.pack()
+    #img_ref_link = "learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"
+    #img_user_link = "learn/static/learn/fig/user.png"
+    img_ref_link = "/static/learn/fig/" + lang + "/" + word_eng + "-" + lang + ".png"
+    img_user_link = "/static/learn/fig/user.png"
 
 
-
-    window = tk.Tk()
-    launch_window = Winconfig(window)
-    window.mainloop()
-    window.destroy()
-
-    # retry_butn = tk.button('Retry', 'target')
-    # conf_butn = tk.button('OK', 'target')
-    # window.flip()
-
-
-    context = {
-        #'word_result': data[0],
-        #'word_in' : word_in,
-        #'score': data[1],
-        'message' : message,
-    }
-
-    #return render(request, 'learn/index.html')
-
-    #return render(request, 'learn/voc.html', context)
-    return voc(request)
-    """
-
-    img_ref_link = "learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"
-    img_user_link = "learn/fig/testcloud.png"
-
+    """"
     context = {
         'message' : message,
         'img_ref_link': img_ref_link,
         'img_user_link': img_user_link
     }
-
     return render(request, 'learn/evaluate.html', context)
+    """
 
+    """
+    with open("learn/templates/evaluate.html", 'r+') as f:
+        #print(request.body)
+        html_response= ""
+        for line in f:
+            html_response = html_response + line
+
+    """
+    html_response = """
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Title</title>
+        </head>
+        <body>
+        
+        <p>"""+message+"""
+        </p>
+        <br>
+        <div>
+        <img src='
+        """+img_ref_link+"""
+        ' style="width: 45%;height: 100%;">
+        <img src='
+        """+img_user_link+"""
+        ' style="width: 45%;height: 100%;">
+        </div>
+        
+        <div>
+        <a href="/learn/voc/">Back</a>
+        </div>
+        
+        </body>
+        </html>
+        """
+    return HttpResponse(html_response)
+
+@login_required(login_url='/learn/')
+def storeaudio(request):
+    #1) Record stream data from the mic, 2)evaluate it with Google Speech-to-text score and 3) graph it
+    print('writing the file')
+    with open("learn/static/learn/audio/user.mp3", 'wb') as f:
+        #print(request.body)
+        f.write(request.body)
+
+
+    html_response = "<html><b>you made a file</p></html>"
+    return HttpResponse(html_response)
+    #return HttpResponse(json.dumps(html_response))
+    #return JsonResponse(html_response)
 
 
 @login_required(login_url='/learn/')

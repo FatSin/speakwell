@@ -28,8 +28,7 @@ Example usage:
 # [START import_libraries]
 from __future__ import division
 
-import re
-import sys
+import re, sys, io
 
 from google.cloud import speech
 from google.cloud.speech import enums
@@ -61,9 +60,46 @@ import contextlib
 from pydub import AudioSegment
 
 
-def print_from_mp3(word, lang):
-    path = "learn/static/learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
-    sound = AudioSegment.from_mp3(path)
+def mp3_to_wav(file):
+    sound = AudioSegment.from_ogg(file)
+    wav_file = "learn/static/learn/audio/user.wav"
+    sound = sound.set_channels(1)
+    sound = sound.set_frame_rate(16000)
+    sound.export(wav_file, format="wav")
+    return wav_file
+
+def print_from_mp3(word, lang, is_from_mic):
+    if is_from_mic:
+        path = "learn/static/learn/audio/user.mp3"
+        fig_path = "learn/static/learn/fig/user.png"
+        sound = AudioSegment.from_ogg(path)
+    else:
+        path = "learn/static/learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
+        fig_path = "learn/static/learn/fig/"+lang+"/"+word+"-"+lang+".png"
+        sound = AudioSegment.from_mp3(path)
+
+    #sound = AudioSegment.from_mp3(path)
+    # get raw audio data as a bytestring
+    raw_data = sound.raw_data
+    # get the frame rate
+    sample_rate = sound.frame_rate
+    # get amount of bytes contained in one sample
+    sample_size = sound.sample_width
+    # get channels
+    channels = sound.channels
+
+    fig = plt.figure()
+    s = fig.add_subplot(111)
+    amplitude = np.fromstring(raw_data, np.int16)
+    s.plot(amplitude)
+    #Only display positive y-values
+    s.set_ylim(bottom=0.)
+    fig.savefig(fig_path)
+
+
+def print_from_wav(word, lang):
+    path = "learn/static/learn/audio/"+lang+"/"+word+"-"+lang+".wav"
+    sound = AudioSegment.from_wav(path)
     # get raw audio data as a bytestring
     raw_data = sound.raw_data
     # get the frame rate
@@ -126,6 +162,58 @@ def print_from_cloud(object):
 
 
 ############################
+
+def recognition_from_file(stream_file, lang):
+    """Streams transcription of the given audio file."""
+    stream_file = mp3_to_wav(stream_file)
+
+    client = speech.SpeechClient()
+
+    with io.open(stream_file, 'rb') as audio_file:
+        content = audio_file.read()
+        #print(content)
+
+    # In practice, stream should be a generator yielding chunks of audio data.
+    stream = [content]
+    requests = (types.StreamingRecognizeRequest(audio_content=chunk)
+                for chunk in stream)
+
+    config = types.RecognitionConfig(
+        encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz=16000,
+        language_code=lang)
+    streaming_config = types.StreamingRecognitionConfig(config=config)
+
+    # streaming_recognize returns a generator.
+    responses = client.streaming_recognize(streaming_config, requests)
+    print(responses)
+
+    for response in responses:
+        # Once the transcription has settled, the first result will contain the
+        # is_final result. The other results will be for subsequent portions of
+        # the audio.
+        print('Parsing responses')
+        for result in response.results:
+            print('Parsing results')
+            print('Finished:')
+            print(result.is_final)
+            print('stability:')
+            print(result.stability)
+            #print('Finished: {}'.format(result.is_final))
+            #print('Stability: {}'.format(result.stability))
+            alternatives = result.alternatives
+            # The alternatives are ordered from most likely to least.
+            for alternative in alternatives:
+                print('Confidence: {}'.format(alternative.confidence))
+                print(u'Transcript: {}'.format(alternative.transcript))
+        result = response.results[0]
+        #print(result)
+        transcript = result.alternatives[0].transcript
+        score = str(result.alternatives[0].confidence * 100)
+        print('Transcript: {0}, Score: {1}'.format(transcript, score))
+        return [transcript, score]
+
+
 
 #Réécriture du générateur 'requests' du main, pour pv en 1 seule boucle récup le son pour
 # 1)pv le grapher 2) pv l'envoyer au cloud
@@ -376,7 +464,6 @@ def listen_print_single(responses):
             #num_chars_printed = 0
 
 
-
 def main():
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
@@ -456,4 +543,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    #main()
+    stream_file = 'learn/static/learn/audio/user.mp3'
+    lang = 'ja-JP'
+    recognition_from_file(stream_file, lang)

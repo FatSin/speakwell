@@ -5,7 +5,7 @@
 {% load static %}
 {% load learn_tags %}
 
-<div>
+<div id="div-voc">
 
     <!--
     <div>You are learning {{ lang }}</div>
@@ -47,6 +47,7 @@
                         <!-- génial : <a href="{% static file %}" class="listen" target="_blank" >Listen</a>-->
                         <a href="#" class="listen" onclick="playAudio('{{file}}');return false;">Listen</a>
                         <audio id="{{file}}" src="{% static file %}" >Listen</audio>
+                        <!--
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
                             <input type="hidden" name="lang" value="jp" method="post">
@@ -55,6 +56,10 @@
                             <input type="hidden" name="word_kanji" value="{{word.NameKanji}}" method="post">
                             <input class="repeat" type="submit" value="Repeat" method="post">
                         </form>
+                        -->
+                        <button id="start-{{word.NameEng.NameEng}}" onclick="recordAudio('{{word.NameEng.NameEng}}','jp','{{word.NameHira}}', '{{word.NameKanji}}');">Start recording</button>
+                        <button id="stop-{{word.NameEng.NameEng}}">Stop</button>
+
                         {% if word.id in words_done  %}
                         <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;height: 10%;">
                         {% else %}
