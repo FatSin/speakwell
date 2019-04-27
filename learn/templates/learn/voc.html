@@ -79,7 +79,9 @@
                         {%  getfilefr word.NameEng.NameEng as file %}
                         <!--<p>The associated file is {{ file }}</p>-->
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
-                        <a href="{% static file %}" class="listen" target="_blank" >Listen</a>
+                        <a href="#" class="listen" onclick="playAudio('{{file}}');return false;">Listen</a>
+                        <audio id="{{file}}" src="{% static file %}" >Listen</audio>
+                        <!--
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
                             <input type="hidden" name="lang" value="jp" method="post">
@@ -87,6 +89,10 @@
                             <input type="hidden" name="word_fr" value="{{word.Name}}" method="post">
                             <input class="repeat" type="submit" value="Repeat" method="post">
                         </form>
+                        -->
+                        <button class="repeat" id="start-{{word.NameEng.NameEng}}" onclick="recordAudio('{{word.NameEng.NameEng}}','fr','{{word.Name}}');">Repeat</button>
+                        <button class="repeat" id="stop-{{word.NameEng.NameEng}}">Stop</button>
+
                         {% if word.id in words_done  %}
                         <img src="{% static 'learn/img/green-button.png' %}"  style="width: 10%;height: 10%;">
                         {% else %}
@@ -108,7 +114,9 @@
                         {%  getfileru word.NameEng.NameEng as file %}
                         <!--<p>The associated file is {{ file }}</p>-->
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
-                        <a href="{% static file %}" class="listen" target="_blank" >Listen</a>
+                        <a href="#" class="listen" onclick="playAudio('{{file}}');return false;">Listen</a>
+                        <audio id="{{file}}" src="{% static file %}" >Listen</audio>
+                        <!--
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
                             <input type="hidden" name="lang" value="jp" method="post">
@@ -117,6 +125,10 @@
                             <input type="hidden" name="word_roma" value="{{word.NameRoma}}" method="post">
                             <input class="repeat" type="submit" value="Repeat" method="post">
                         </form>
+                        -->
+                        <button class="repeat" id="start-{{word.NameEng.NameEng}}" onclick="recordAudio('{{word.NameEng.NameEng}}','ru','{{word.NameRu}}', '{{word.NameRoma}}');">Repeat</button>
+                        <button class="repeat" id="stop-{{word.NameEng.NameEng}}">Stop</button>
+
                         {% if word.id in words_done  %}
                         <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;height: 10%;">
                         {% else %}

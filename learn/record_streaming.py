@@ -74,7 +74,10 @@ def print_from_mp3(word, lang, is_from_mic):
         fig_path = "learn/static/learn/fig/user.png"
         sound = AudioSegment.from_ogg(path)
     else:
-        path = "learn/static/learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
+        if lang =='fr':
+            path = "learn/static/learn/audio/" + lang + "/" + word + "-" + lang + ".wav"
+        else:
+            path = "learn/static/learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
         fig_path = "learn/static/learn/fig/"+lang+"/"+word+"-"+lang+".png"
         sound = AudioSegment.from_mp3(path)
 

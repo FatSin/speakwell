@@ -22,7 +22,13 @@ function playAudio(filename) {
 }
 
 
-function recordAudio(word, lang, wordinlang, word2) {
+function recordAudio() {
+    console.log(arguments);
+
+    var word = arguments[0];
+    var lang = arguments[1];
+    var wordinlang = arguments[2];
+    var word2 = arguments[3];
 
     var csrfcookie = function() {
         var cookieValue = null,
@@ -94,12 +100,26 @@ function recordAudio(word, lang, wordinlang, word2) {
                 var xhr2 = new XMLHttpRequest();
                 xhr2.open('POST', '/learn/record/', true);
                 xhr2.setRequestHeader('X-CSRFToken', csrfcookie());
-                var parameters = word+','+lang+','+wordinlang+','+word2;
+                //Response per language
+                if (lang === 'jp'){
+                    //var wordkanji = arguments[3];
+                    var parameters = word+','+lang+','+wordinlang+','+word2;
+                    console.log(word+','+lang+','+wordinlang+','+word2);
+                }
+                else if (lang === 'fr'){
+                    var parameters = word+','+lang+','+wordinlang;
+                    console.log(word+','+lang+','+wordinlang);
+                }
+                else if (lang === 'ru'){
+                    //var wordroma = arguments[3];
+                    var parameters = word+','+lang+','+wordinlang+','+word2;
+                    console.log(word+','+lang+','+wordinlang+','+word2);
+                }
                 xhr2.onload = function(e) {
                     //Callback
                     console.log('Evaluation in progress');
-                    console.log(word+','+lang+','+wordinlang+','+word2);
-                    console.log(xhr2.responseText);
+
+                    //console.log(xhr2.responseText);
                     //document.getElementById('div-voc').innerHTML = xhr2.responseText;
                     document.body.innerHTML = xhr2.responseText;
                     document.body.setAttribute('style','background:white;');

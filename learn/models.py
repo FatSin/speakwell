@@ -77,6 +77,7 @@ class Progression(models.Model):
 class Theme(models.Model):
     NameEng = models.CharField(max_length=20)
     NameFr = models.CharField(max_length=20)
+    IsEnabled = models.BooleanField(max_length=20, default=True)
     #Word = models.ForeignKey(Word, on_delete=models.CASCADE)
     words = models.ManyToManyField(Word, related_name='themes', blank=True)
 

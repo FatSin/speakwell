@@ -274,7 +274,7 @@ def voc(request):
     #if lang == 'jp':
     #    words_list = [ wrd for wrd in Wordjp.objects.all() ]
 
-    themes_list = [thm for thm in Theme.objects.all() ]
+    themes_list = [thm for thm in Theme.objects.filter(IsEnabled=True)]
 
 
     for thm in themes_list:
@@ -336,8 +336,7 @@ def record(request):
     print(resp)
     word_eng = resp[0]
     lang = resp[1]
-    word_hira = resp[2]
-    word_kanji = resp[3]
+
     #lang = request.POST.get('lang')
     #word_eng = request.POST.get('word_eng')
     #word_hira = request.POST.get('word_hira')
@@ -362,6 +361,10 @@ def record(request):
 
     if lang == 'jp':
         lang_code = Language.objects.get(NameEng='Japanese').Code
+    if lang == 'fr':
+        lang_code = Language.objects.get(NameEng='French').Code
+    if lang == 'ru':
+        lang_code = Language.objects.get(NameEng='Russian').Code
 
     data = recfile(audio_file, lang_code)
     print(data)
@@ -369,28 +372,80 @@ def record(request):
 
     score = data[1][:2]
 
-    if (word_hira in data[0]) or (word_kanji in data[0]):
-    #data[1] = 81 #Test
-    #if word_in: #Test
-        message = "Congratulations, you pronounced {0} for {1} with a score of {2}%".format(word_hira, data[0], score)
-        if int(score) >= 80:
-            word_id = Wordjp.objects.get(NameHira=word_hira).id
-            progression = Progression.objects.get(UserId=custom_user.id, LangId=1)
+    if lang == 'jp':
+        word_hira = resp[2]
+        word_kanji = resp[3]
+        if (word_hira in data[0]) or (word_kanji in data[0]):
+        #data[1] = 81 #Test
+        #if word_in: #Test
+            message = "Congratulations, you pronounced {0} with a score of {1}%".format(word_hira, score)
+            if int(score) >= 80:
+                word_id = Wordjp.objects.get(NameHira=word_hira).id
+                progression = Progression.objects.get(UserId=custom_user.id, LangId=1)
 
-            if word_id not in progression.WordsLearnt:
-                progression.WordsLearnt.append(word_id)
-                progression.Points+=10
-                progression.Level = progression.Points //100
-                progression.save()
+                if word_id not in progression.WordsLearnt:
+                    progression.WordsLearnt.append(word_id)
+                    progression.Points+=10
+                    progression.Level = progression.Points //100
+                    progression.save()
 
-            print("ajout de l'id {0} à la liste. On obtient :".format(word_id))
-            print(progression.WordsLearnt)
-        elif int(score) >= 65:
-            message = "You pronounced the word {0} with a score of {1}. You're almost there, Try again !".format(word_hira, score)
+                print("ajout de l'id {0} à la liste. On obtient :".format(word_id))
+                print(progression.WordsLearnt)
+            elif int(score) >= 65:
+                message = "You pronounced the word {0} with a score of {1}. You're almost there, Try again !".format(word_hira, score)
+            else:
+                message = "You pronounced the word {0} with a score of {1}. Don't beat yourself up and keep on listening the word.".format(word_hira, score)
         else:
-            message = "You pronounced the word {0} with a score of {1}. Don't beat yourself up and keep on listening the word.".format(word_hira, score)
-    else:
-        message = "Oops, you did not pronounce {0} well. Did you mean {1} ?".format(word_hira, data[0])
+            message = "Oops, you did not pronounce {0} well. Did you mean {1} ?".format(word_hira, data[0])
+
+    if lang == 'fr':
+        word_fr = resp[2]
+        if (word_fr in data[0]):
+            message = "Congratulations, you pronounced {0} with a score of {1}%".format(word_fr, score)
+            if int(score) >= 80:
+                word_id = Wordfr.objects.get(Name=word_fr).id
+                progression = Progression.objects.get(UserId=custom_user.id, LangId=3)
+
+                if word_id not in progression.WordsLearnt:
+                    progression.WordsLearnt.append(word_id)
+                    progression.Points+=10
+                    progression.Level = progression.Points //100
+                    progression.save()
+
+                print("ajout de l'id {0} à la liste. On obtient :".format(word_id))
+                print(progression.WordsLearnt)
+            elif int(score) >= 65:
+                message = "You pronounced the word {0} with a score of {1}. You're almost there, Try again !".format(word_fr, score)
+            else:
+                message = "You pronounced the word {0} with a score of {1}. Don't beat yourself up and keep on listening the word.".format(word_fr, score)
+        else:
+            message = "Oops, you did not pronounce {0} well. Did you mean {1} ?".format(word_fr, data[0])
+
+    if lang == 'ru':
+        word_ru = resp[2]
+        word_roma = resp[3]
+        if (word_ru in data[0]) or (word_roma in data[0]):
+        #data[1] = 81 #Test
+        #if word_in: #Test
+            message = "Congratulations, you pronounced {0} with a score of {1}%".format(word_ru,score)
+            if int(score) >= 80:
+                word_id = Wordru.objects.get(NameRu=word_ru).id
+                progression = Progression.objects.get(UserId=custom_user.id, LangId=4)
+
+                if word_id not in progression.WordsLearnt:
+                    progression.WordsLearnt.append(word_id)
+                    progression.Points+=10
+                    progression.Level = progression.Points //100
+                    progression.save()
+
+                print("ajout de l'id {0} à la liste. On obtient :".format(word_id))
+                print(progression.WordsLearnt)
+            elif int(score) >= 65:
+                message = "You pronounced the word {0} with a score of {1}. You're almost there, Try again !".format(word_ru, score)
+            else:
+                message = "You pronounced the word {0} with a score of {1}. Don't beat yourself up and keep on listening the word.".format(word_ru, score)
+        else:
+            message = "Oops, you did not pronounce {0} well. Did you mean {1} ?".format(word_ru, data[0])
 
 
     #img_ref_link = "learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"

@@ -10,7 +10,7 @@ def getfilejp(word):
 @register.simple_tag
 def getfilefr(word):
     word = word.replace(" ", "")
-    return 'learn/audio/fr/{0}-fr.mp3'.format(word)
+    return 'learn/audio/fr/{0}-fr.wav'.format(word)
 
 @register.simple_tag
 def getfileru(word):
