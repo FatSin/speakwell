@@ -6,7 +6,7 @@
 
 <div>
 
-<p>Here is your progression</p>
+<p>{{ user.username }}, here is your progression</p>
 
 {% for prog in progressions %}
 
@@ -18,8 +18,8 @@
             Level : {{prog.Level}}<br><br>
             Points : {{prog.Points}}<br><br>
             Words completed : {{prog.WordsLearnt|length}}<br><br>
-            Exercises completed : {{prog.Exelearnt|length}}<br><br>
-            Facts unblocked : {{prog.FunFacts|length}} <br><br>
+            <!--Exercises completed : {{prog.Exelearnt|length}}<br><br>
+            Facts unblocked : {{prog.FunFacts|length}} <br><br>-->
 
         <br>
         {% if prog.IsActive != True %}

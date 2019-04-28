@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^stats/', views.stats, name='stats'),
     url(r'^quizz/', views.quizz, name='quizz'),
     url(r'^testaudiojs/', views.testaudiojs, name='testaudiojs'),
+    url(r'^credits/', views.credits, name='credits'),
     #url(r'^exe/', views.exe, name='exe'),
     ]
 

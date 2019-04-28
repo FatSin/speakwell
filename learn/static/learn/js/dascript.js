@@ -96,35 +96,40 @@ function recordAudio() {
                     //document.getElementById('div-voc').innerHTML = xhr.responseText;
                 };
                 xhr.send(blob);
+                console.log('Wait...');
+                window.setTimeout(handleXhr2,1000);
 
-                var xhr2 = new XMLHttpRequest();
-                xhr2.open('POST', '/learn/record/', true);
-                xhr2.setRequestHeader('X-CSRFToken', csrfcookie());
-                //Response per language
-                if (lang === 'jp'){
-                    //var wordkanji = arguments[3];
-                    var parameters = word+','+lang+','+wordinlang+','+word2;
-                    console.log(word+','+lang+','+wordinlang+','+word2);
-                }
-                else if (lang === 'fr'){
-                    var parameters = word+','+lang+','+wordinlang;
-                    console.log(word+','+lang+','+wordinlang);
-                }
-                else if (lang === 'ru'){
-                    //var wordroma = arguments[3];
-                    var parameters = word+','+lang+','+wordinlang+','+word2;
-                    console.log(word+','+lang+','+wordinlang+','+word2);
-                }
-                xhr2.onload = function(e) {
-                    //Callback
-                    console.log('Evaluation in progress');
 
-                    //console.log(xhr2.responseText);
-                    //document.getElementById('div-voc').innerHTML = xhr2.responseText;
-                    document.body.innerHTML = xhr2.responseText;
-                    document.body.setAttribute('style','background:white;');
-                };
-                xhr2.send(parameters);
+                function handleXhr2(){
+                  var xhr2 = new XMLHttpRequest();
+                  xhr2.open('POST', '/learn/record/', true);
+                  xhr2.setRequestHeader('X-CSRFToken', csrfcookie());
+                  //Response per language
+                  if (lang === 'jp'){
+                      //var wordkanji = arguments[3];
+                      var parameters = word+','+lang+','+wordinlang+','+word2;
+                      console.log(word+','+lang+','+wordinlang+','+word2);
+                  }
+                  else if (lang === 'fr'){
+                      var parameters = word+','+lang+','+wordinlang;
+                      console.log(word+','+lang+','+wordinlang);
+                  }
+                  else if (lang === 'ru'){
+                      //var wordroma = arguments[3];
+                      var parameters = word+','+lang+','+wordinlang+','+word2;
+                      console.log(word+','+lang+','+wordinlang+','+word2);
+                  }
+                  xhr2.onload = function(e) {
+                      //Callback
+                      console.log('Evaluation in progress');
+
+                      //console.log(xhr2.responseText);
+                      //document.getElementById('div-voc').innerHTML = xhr2.responseText;
+                      document.body.innerHTML = xhr2.responseText;
+                      document.body.setAttribute('style','background:white;');
+                  };
+                  xhr2.send(parameters);
+                }
             }
         })
         .catch(function(err){

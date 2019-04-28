@@ -223,7 +223,7 @@ def stats(request):
     progressions = Progression.objects.filter(UserId=custom_user.id).order_by('IsActive').reverse()
     progressions_list = [prog for prog in progressions]
 
-    languages = Language.objects.all()
+    languages = Language.objects.exclude(NameEng="English")
     for language in languages:
         if language not in [prog.LangId for prog in progressions]:
             no_progression = {'LangId':language.NameEng,
@@ -543,7 +543,7 @@ def quizz(request):
 
         if response == cur_word:
             message = 'Nice one !'
-            quizz.Score +=10
+            quizz.Score +=1
         else:
             message = 'OOps, wrong answer.'
 
@@ -564,10 +564,14 @@ def quizz(request):
 
     #Start a quizz
     if launch :
+        Quizz.objects.filter(Progression=progression, State=1).delete()
+
         total = request.POST.get('number')
-        if total:
-            total = int(total)
-        mode = request.POST.get('mode')
+        total = int(total)
+
+        #mode = request.POST.get('mode')
+        mode = "rec"
+
 
         if langid == 1 :
             word_list_total = [word for word in Wordjp.objects.all()]
@@ -577,6 +581,9 @@ def quizz(request):
 
         if langid == 4:
             word_list_total = [word for word in Wordru.objects.all()]
+
+        if total > len(word_list_total):
+            total = len(word_list_total)
 
         word_list = []
         # word_list = random.choice(word_list, total)
@@ -629,6 +636,7 @@ def quizz(request):
             'mode': quizz.Mode,
             'word_list': quizz.WordList,
             'message': message,
+            'end': True
         }
 
 
@@ -678,3 +686,15 @@ def quizz(request):
         }
 
     return render(request, 'learn/launch_quizz.html', context)
+
+
+@login_required(login_url='/learn/')
+def credits(request):
+    user = request.user
+    custom_user = Usercustom.objects.get(user=user)
+    progression = Progression.objects.get(UserId=custom_user.id, IsActive=True)
+    lang = progression.LangId
+    context = {
+        'lang': lang,
+    }
+    return render(request, 'learn/credits.html', context)

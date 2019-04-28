@@ -6,8 +6,11 @@
 
 <div>
 
-    <p>Quizz mode : {{mode}}</p><br>
-    <p>Language : {{lang}}</p><br>
+    <!--<p>Quizz mode : {{mode}}</p><br>
+    <p>Language : {{lang}}</p><br>-->
+    <p>Quizz</p>
+    <hr>
+    <p>{{message}}</p><br>
     <p>Score : {{score}}/{{total}}</p><br>
     <form action="/learn/quizz/" method="post">
         {% csrf_token %}
@@ -25,8 +28,13 @@
         {{responses.2.NameEng}} <input type="radio" name="response" value="{{responses.2.NameEng}}" method="post"><br>
         {{responses.3.NameEng}} <input type="radio" name="response" value="{{responses.3.NameEng}}" method="post"><br>
         {% endif %}
+        <br>
 
+        {% if end %}
+        <a class="big-link" href="/learn/home" >Back</a>
+        {% else %}
         <input class="big-button" type="submit" value="{{button}}" method="post">
+        {% endif %}
 
     </form>
 </div>
