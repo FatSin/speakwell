@@ -136,3 +136,12 @@ function recordAudio() {
             console.log(err.name, err.message);
         });
 }
+
+function showMenu() {
+  var x = document.getElementById("menu");
+  if (x.className === "normal") {
+    x.className = "show";
+  } else {
+    x.className = "normal";
+  }
+}

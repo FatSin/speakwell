@@ -356,7 +356,7 @@ footer {
     #menu{
         width:initial;
     }
-    #menu .menu {
+    .normal a {
         display:none;
     }
     #menu .icon{
@@ -364,6 +364,24 @@ footer {
         padding-top:7px;
     }
 
+    .show {
+        position: relative;
+        background-color:#372a2a;
+        padding: 30px 7px 7px 7px;
+        margin-left:20px;
+    }
+
+    .show .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .show a {
+        float: none;
+        display: block;
+        text-align: left;
+        color:#8a7474;
+    }
     content {
         justify-content: center;
         display: flex;
