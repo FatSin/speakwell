@@ -4,20 +4,25 @@
     <head>
         <title>Listen and learn</title>
         <link href="{% static 'learn/css/style.css' %}" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
 
     <body id="body-{{lang}}">
         <header>
             <div id="banner">
-                <div>
+                <div id="logo">
                     <a href="/learn/home/">Vowell</a>
                 </div>
                 <div id="menu">
-                    <a href="/learn/voc/">Vocabulary</a>
-                    <a href="/learn/quizz/">Quizz</a>
-                    <a href="/learn/stats/">Stats</a>
+                    <a class="menu" href="/learn/voc/">Vocabulary</a>
+                    <a class="menu" href="/learn/quizz/">Quizz</a>
+                    <a class="menu" href="/learn/stats/">Stats</a>
                     <!--<a href="#">Parameters</a>-->
-                    <a href="/learn/log_out/">Logout</a>
+                    <a class="menu" href="/learn/log_out/">Logout</a>
+                    <a href="javascript:void(0);" class="icon" onclick="showMenu()">
+                        <i class="fa fa-bars"></i>
+                    </a>
                 </div>
             </div>
         </header>
@@ -36,4 +41,6 @@
         </footer>
 
         <script src="{% static 'learn/js/dascript.js' %}"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </body>

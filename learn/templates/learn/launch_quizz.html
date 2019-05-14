@@ -22,7 +22,9 @@
         <input type="hidden" name="cur_word" value="{{cur_word.NameEng}}" method="post">
         <input type="hidden" name="word_list" value="{{word_list}}" method="post">
         <input type="hidden" name="responses" value="{{responses}}" method="post">
-        <p>What is this word ? : {{cur_word.NameHira}}</p><br>
+        <p>What is this word ? :</p>
+        <p>{{cur_word.NameHira}}</p>
+        <br>
         {{responses.0.NameEng}} <input type="radio" name="response" value="{{responses.0.NameEng}}" method="post"><br>
         {{responses.1.NameEng}} <input type="radio" name="response" value="{{responses.1.NameEng}}" method="post"><br>
         {{responses.2.NameEng}} <input type="radio" name="response" value="{{responses.2.NameEng}}" method="post"><br>

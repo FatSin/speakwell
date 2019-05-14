@@ -28,7 +28,7 @@ Example usage:
 # [START import_libraries]
 from __future__ import division
 
-import re, sys, io
+import re, sys, io, os
 
 from google.cloud import speech
 from google.cloud.speech import enums
@@ -74,12 +74,22 @@ def print_from_mp3(word, lang, is_from_mic):
         fig_path = "learn/static/learn/fig/user.png"
         sound = AudioSegment.from_ogg(path)
     else:
-        if lang =='fr':
-            path = "learn/static/learn/audio/" + lang + "/" + word + "-" + lang + ".wav"
+        path = "learn/static/learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
+        if os.path.exists(path):
+            sound = AudioSegment.from_mp3(path)
         else:
-            path = "learn/static/learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
+            path = "learn/static/learn/audio/" + lang + "/" + word + "-" + lang + ".wav"
+            if os.path.exists(path):
+                sound = AudioSegment.from_wav(path)
+            else:
+                path = "learn/static/learn/audio/" + lang + "/" + word + "-" + lang + ".ogg"
+                if os.path.exists(path):
+                    sound = AudioSegment.from_ogg(path)
+                else:
+                    sound = b''
+
         fig_path = "learn/static/learn/fig/"+lang+"/"+word+"-"+lang+".png"
-        sound = AudioSegment.from_mp3(path)
+
 
     #sound = AudioSegment.from_mp3(path)
     # get raw audio data as a bytestring

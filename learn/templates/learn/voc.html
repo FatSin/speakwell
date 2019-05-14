@@ -11,27 +11,31 @@
     <div>You are learning {{ lang }}</div>
     <hr>
     -->
-    <h2>Themes</h2>
-
     <!--
     {% for theme in themes_list %}
         <p>{{ theme.NameEng }}</p>
         <p>Encore un thème</p>
     {% endfor %}
     -->
-    <p id="themelist">
+    <hr class="hr-full">
+    <div id="themelist">
+        <h2 class="dat-h2">Themes</h2>
+        <p id="themes">
     {% for theme in words_list %}
+            <i class="fa fa-angle-right"></i>
         <a href="#{{ theme.0 }}">{{ theme.0 }}</a>
         <br>
     {% endfor %}
-    </p>
+        </p>
+    </div>
+    <hr class="hr-full">
 
 
     {% for theme in words_list %}
-        <p id="{{ theme.0 }}" style="font-weight:bold;">{{ theme.0 }}</p>
+        <p id="{{ theme.0 }}" style="font-weight:bold;color:#725555;">{{ theme.0 }}</p>
 
         {% for word in theme.1 %}
-            <ul>
+            <ul style="padding-left: 0;">
                 {% if lang == 'Japanese' %}
                 <li><div class="details details-up" style="margin-bottom: -4%;">
                         <span class="word-en">{{ word.NameEng.NameEng }}</span>
@@ -61,9 +65,9 @@
                         <button class="repeat" id="stop-{{word.NameEng.NameEng}}">Stop</button>
 
                         {% if word.id in words_done  %}
-                        <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;height: 10%;">
+                        <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;max-width:25px;">
                         {% else %}
-                        <img src="{% static 'learn/img/grey-button.png' %}" style="width: 10%;height: 10%;">
+                        <img src="{% static 'learn/img/grey-button.png' %}" style="width: 10%;max-width:25px;">
                         {% endif %}
                         </div>
                     </li>
@@ -94,9 +98,9 @@
                         <button class="repeat" id="stop-{{word.NameEng.NameEng}}">Stop</button>
 
                         {% if word.id in words_done  %}
-                        <img src="{% static 'learn/img/green-button.png' %}"  style="width: 10%;height: 10%;">
+                        <img src="{% static 'learn/img/green-button.png' %}"  style="width: 10%;max-width:25px;">
                         {% else %}
-                        <img src="{% static 'learn/img/grey-button.png' %}"  style="width: 10%;height: 10%;">
+                        <img src="{% static 'learn/img/grey-button.png' %}"  style="width: 10%;max-width:25px;">
                         {% endif %}
                     </div>
                 </li>
@@ -130,9 +134,9 @@
                         <button class="repeat" id="stop-{{word.NameEng.NameEng}}">Stop</button>
 
                         {% if word.id in words_done  %}
-                        <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;height: 10%;">
+                        <img src="{% static 'learn/img/green-button.png' %}" style="width: 10%;max-width:25px;">
                         {% else %}
-                        <img src="{% static 'learn/img/grey-button.png' %}" style="width: 10%;height: 10%;">
+                        <img src="{% static 'learn/img/grey-button.png' %}" style="width: 10%;max-width:25px;">
                         {% endif %}
                     </div>
                 </li>
