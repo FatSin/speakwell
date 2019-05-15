@@ -68,7 +68,7 @@ function recordAudio() {
                 console.log(recorder.state);
             });
             */
-            alert('Ready?')
+            alert("Ready? Click 'OK' to start recording. Click the 'Stop' button to finish.")
             recorder.start();
             console.log(recorder.state);
 

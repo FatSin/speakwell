@@ -96,9 +96,9 @@ hr {
 }
 
 #themelist {
-    background: #e8e3e3;
+    background: #e4e3e3;
     border-radius: 0.1em;
-    padding: 3px 0 20px 0;
+    padding: 0.5% 0 1% 0;
     color:#725555;
     text-align:center;
     width:100%;
@@ -111,7 +111,7 @@ hr {
 
 #themes {
     text-align:initial;
-    padding-left:21%;
+    padding-left:30%;
 }
 
 /*Template (=good for unadaptive)
@@ -171,7 +171,7 @@ li span{
     color: #393535;
     border: solid 1px #9b9898;
     border-radius: 0.2em;
-    padding: 1% 2% 1% 2%;
+    padding: 0.5% 2% 0.5% 2%;
     background: #8e8989;
     font-size: 0.9em;
     margin-bottom: 8.5%;
