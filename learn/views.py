@@ -467,8 +467,8 @@ def record(request):
 
         #img_ref_link = "learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"
         #img_user_link = "learn/static/learn/fig/user.png"
-        img_ref_link = "/learn/media/learn/fig/" + lang + "/" + word_eng + "-" + lang + ".png"
-        img_user_link = "/learn/media/learn/fig/user.png"
+        img_ref_link = "/media/learn/fig/" + lang + "/" + word_eng + "-" + lang + ".png"
+        img_user_link = "/media/learn/fig/user.png"
 
 
         """"
