@@ -44,12 +44,13 @@ from six.moves import queue
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
 
-#Static directory configuration
-if os.environ.get('ENV') == 'PRODUCTION':
-    STATIC_DIR = 'speakwell/staticfiles/'
-else:
-    STATIC_DIR = 'learn/static/'
+#Media directory configuration
 
+#if os.environ.get('ENV') == 'PRODUCTION':
+#    MEDIA_DIR = 'speakwell/staticfiles/'
+#else:
+#    MEDIA_DIR = 'learn/static/'
+MEDIA_DIR = 'learn/media/'
 
 """Draw Graph import"""
 
@@ -67,7 +68,7 @@ from pydub import AudioSegment
 
 def mp3_to_wav(file):
     sound = AudioSegment.from_ogg(file)
-    wav_file = STATIC_DIR+"learn/audio/user.wav"
+    wav_file = MEDIA_DIR+"learn/audio/user.wav"
     sound = sound.set_channels(1)
     sound = sound.set_frame_rate(16000)
     sound.export(wav_file, format="wav")
@@ -75,25 +76,25 @@ def mp3_to_wav(file):
 
 def print_from_mp3(word, lang, is_from_mic):
     if is_from_mic:
-        path = STATIC_DIR+"learn/audio/user.mp3"
-        fig_path = STATIC_DIR+"learn/fig/user.png"
+        path = MEDIA_DIR+"learn/audio/user.mp3"
+        fig_path = MEDIA_DIR+"learn/fig/user.png"
         sound = AudioSegment.from_ogg(path)
     else:
-        path = STATIC_DIR+"learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
+        path = MEDIA_DIR+"learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
         if os.path.exists(path):
             sound = AudioSegment.from_mp3(path)
         else:
-            path = STATIC_DIR+"learn/audio/" + lang + "/" + word + "-" + lang + ".wav"
+            path = MEDIA_DIR+"learn/audio/" + lang + "/" + word + "-" + lang + ".wav"
             if os.path.exists(path):
                 sound = AudioSegment.from_wav(path)
             else:
-                path = STATIC_DIR+"learn/audio/" + lang + "/" + word + "-" + lang + ".ogg"
+                path = MEDIA_DIR+"learn/audio/" + lang + "/" + word + "-" + lang + ".ogg"
                 if os.path.exists(path):
                     sound = AudioSegment.from_ogg(path)
                 else:
                     sound = b''
 
-        fig_path = STATIC_DIR+"learn/fig/"+lang+"/"+word+"-"+lang+".png"
+        fig_path = MEDIA_DIR+"learn/fig/"+lang+"/"+word+"-"+lang+".png"
 
 
     #sound = AudioSegment.from_mp3(path)
@@ -118,7 +119,7 @@ def print_from_mp3(word, lang, is_from_mic):
 
 
 def print_from_wav(word, lang):
-    path = STATIC_DIR+"learn/audio/"+lang+"/"+word+"-"+lang+".wav"
+    path = MEDIA_DIR+"learn/audio/"+lang+"/"+word+"-"+lang+".wav"
     sound = AudioSegment.from_wav(path)
     # get raw audio data as a bytestring
     raw_data = sound.raw_data
@@ -135,7 +136,7 @@ def print_from_wav(word, lang):
     s.plot(amplitude)
     #Only display positive y-values
     s.set_ylim(bottom=0.)
-    fig.savefig(STATIC_DIR+"learn/fig/"+lang+"/"+word+"-"+lang+".png")
+    fig.savefig(MEDIA_DIR+"learn/fig/"+lang+"/"+word+"-"+lang+".png")
 
 def print_from_cloud(object):
 
@@ -177,7 +178,7 @@ def print_from_cloud(object):
     s.plot(amplitude)
     # Only display positive y-values
     s.set_ylim(bottom=0.)
-    fig.savefig(STATIC_DIR+"learn/fig/testcloud.png")
+    fig.savefig(MEDIA_DIR+"learn/fig/testcloud.png")
 
 
 
@@ -358,7 +359,7 @@ class MicrophoneStream(object):
         s.plot(amplitude)
         # Only display positive y-values
         s.set_ylim(bottom=0.)
-        fig.savefig(STATIC_DIR+"learn/fig/testcloud.png")
+        fig.savefig(MEDIA_DIR+"learn/fig/testcloud.png")
 
 
 # [END audio_stream]
@@ -549,7 +550,7 @@ def main():
     s.set_ylim(bottom=0.)
     #Test from local
     #fig.savefig('static/learn/fig/testcloud.png')
-    fig.savefig(STATIC_DIR+"learn/fig/testcloud.png")
+    fig.savefig(MEDIA_DIR+"learn/fig/testcloud.png")
 
     print(type(requests))
     print(type(responses))
@@ -564,6 +565,6 @@ def main():
 
 if __name__ == '__main__':
     #main()
-    stream_file = STATIC_DIR+"learn/audio/user.mp3"
+    stream_file = MEDIA_DIR+"learn/audio/user.mp3"
     lang = 'ja-JP'
     recognition_from_file(stream_file, lang)

@@ -350,8 +350,8 @@ def record(request):
 
 
 
-    filename = "learn/static/learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"
-    audio_file = "learn/static/learn/audio/user.mp3"
+    filename = "learn/media/learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"
+    audio_file = "learn/media/learn/audio/user.mp3"
 
     if not os.path.exists(filename):
         print('Graph not found for this audio file. Creating it')
@@ -467,8 +467,8 @@ def record(request):
 
         #img_ref_link = "learn/fig/"+lang+"/"+word_eng+"-"+lang+".png"
         #img_user_link = "learn/static/learn/fig/user.png"
-        img_ref_link = "/static/learn/fig/" + lang + "/" + word_eng + "-" + lang + ".png"
-        img_user_link = "/static/learn/fig/user.png"
+        img_ref_link = "/learn/media/learn/fig/" + lang + "/" + word_eng + "-" + lang + ".png"
+        img_user_link = "/learn/media/learn/fig/user.png"
 
 
         """"
@@ -521,7 +521,7 @@ def record(request):
 def storeaudio(request):
     #1) Record stream data from the mic, 2)evaluate it with Google Speech-to-text score and 3) graph it
     print('writing the file')
-    with open("learn/static/learn/audio/user.mp3", 'wb') as f:
+    with open("learn/media/learn/audio/user.mp3", 'wb') as f:
         #print(request.body)
         f.write(request.body)
 

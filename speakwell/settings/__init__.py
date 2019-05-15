@@ -132,5 +132,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#Media files
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'learn\media')
+MEDIA_URL = '/media/'
+
 LOGIN_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
