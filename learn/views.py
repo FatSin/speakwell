@@ -3,7 +3,8 @@ This script details the actions triggered
 when a client request hits each Django view
 """
 
-import os, random
+import os
+import random
 
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -11,7 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 #from PIL import Image, ImageTk
 
-from .models import Usercustom, Language, Word, Wordjp, Wordfr, Wordru, Progression, Theme, Quizz
+from .models import Usercustom, Language, Wordjp, Wordfr, Wordru, Progression, Theme, Quizz
 
 from .record_streaming import recognition_from_file as recfile
 from .record_streaming import print_from_mp3
@@ -52,22 +53,22 @@ def submit_form_html(request):
                 'message': message
             }
             return render(request, 'learn/index.html', context)
-        else:
-            new_user = User.objects.create_user(username, email, password)
-            language = Language.objects.get(NameEng=lang)
 
-            language_dis = Language.objects.get(NameEng=lang_dis)
-            customu = Usercustom.objects.create(user=new_user, LangDisplay=language_dis)
-            #Create a progression in the selected language
-            new_progression = Progression.objects.create(
-                UserId=customu,
-                LangId=language,
-                Level=0,
-                Points=0,
-                WordsLearnt=[0],
-                Exelearnt=[0],
-                FunFacts=[0]
-                )
+        new_user = User.objects.create_user(username, email, password)
+        language = Language.objects.get(NameEng=lang)
+
+        language_dis = Language.objects.get(NameEng=lang_dis)
+        customu = Usercustom.objects.create(user=new_user, LangDisplay=language_dis)
+        #Create a progression in the selected language
+        new_progression = Progression.objects.create(
+            UserId=customu,
+            LangId=language,
+            Level=0,
+            Points=0,
+            WordsLearnt=[0],
+            Exelearnt=[0],
+            FunFacts=[0]
+            )
 
     user = authenticate(username=username, password=password)
 
@@ -81,12 +82,11 @@ def submit_form_html(request):
 
         return home(request)
 
-    else:
-        message = "Authentication failed, please retry"
-        context = {
-            'message' : message
-        }
-        return render(request, 'learn/index.html', context)
+    message = "Authentication failed, please retry"
+    context = {
+        'message' : message
+    }
+    return render(request, 'learn/index.html', context)
 
 def log_out(request):
     """Log out view. Redirects to index."""
@@ -301,7 +301,8 @@ def record(request):
             if (word_hira in data[0]) or (word_kanji in data[0]):
             #data[1] = 81 #Test
             #if word_in: #Test
-                message = "Congratulations, you pronounced {0} with a score of {1}%".format(word_hira, score)
+                message = "Congratulations, you pronounced {0} with a " \
+                          "score of {1}%".format(word_hira, score)
                 if int(score) >= 80:
                     word_id = Wordjp.objects.get(NameHira=word_hira).id
                     progression = Progression.objects.get(UserId=custom_user.id, LangId=1)
@@ -325,7 +326,7 @@ def record(request):
 
         if lang == 'fr':
             word_fr = resp[2]
-            if (word_fr in data[0]):
+            if word_fr in data[0]:
                 message = "Congratulations, you pronounced {0} with a score of {1}%".format(word_fr, score)
                 if int(score) >= 80:
                     word_id = Wordfr.objects.get(Name=word_fr).id
@@ -333,8 +334,8 @@ def record(request):
 
                     if word_id not in progression.WordsLearnt:
                         progression.WordsLearnt.append(word_id)
-                        progression.Points+=10
-                        progression.Level = progression.Points //100
+                        progression.Points += 10
+                        progression.Level = progression.Points // 100
                         progression.save()
 
                     print("ajout de l'id {0} à la liste. On obtient :".format(word_id))
@@ -454,7 +455,7 @@ def quizz(request):
 
         if response == cur_word:
             message = 'Nice one !'
-            quizz.Score +=1
+            quizz.Score += 1
         else:
             message = 'OOps, wrong answer.'
 
@@ -571,16 +572,6 @@ def quizz(request):
         ind = random.randint(0, len(responses))
         responses.insert(ind, cur_word)
 
-
-#        if langid == 'French':
-#            responses = [word for word in Wordfr.objects.all()]
-#            responses.append(cur_word)
-#            responses = random.choice(word_list, 4)
-#        if langid == 'Russian':
-#            responses = [word for word in Wordru.objects.all()]
-#            responses.append(cur_word)
-#            responses = random.choice(word_list, 4)
-
         quizz.save()
 
         context = {
@@ -599,6 +590,7 @@ def quizz(request):
 
 @login_required(login_url='/learn/')
 def credits(request):
+    """Credits view"""
     user = request.user
     custom_user = Usercustom.objects.get(user=user)
     progression = Progression.objects.get(UserId=custom_user.id, IsActive=True)
