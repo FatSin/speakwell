@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^testaudiojs/', views.testaudiojs, name='testaudiojs'),
     url(r'^credits/', views.credits, name='credits'),
     #url(r'^exe/', views.exe, name='exe'),
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ]
 
 if settings.DEBUG:
    import debug_toolbar

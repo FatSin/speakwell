@@ -50,7 +50,8 @@
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
                         <!-- génial : <a href="{% static file %}" class="listen" target="_blank" >Listen</a>-->
                         <a href="#" class="listen" onclick="playAudio('{{file}}');return false;">Listen</a>
-                        <audio id="{{file}}" src="{% static file %}" >Listen</audio>
+                        <audio id="{{file}}" src="{{MEDIA_URL}}{{file}}" >Listen</audio>
+                        <!--<audio id="{{file}}" src="{% static file %}" >Listen</audio>-->
                         <!--
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
@@ -75,7 +76,7 @@
                 {% elif lang == 'French' %}
                 <li>
                     <div class="details details-up" style="margin-bottom: -4%;">
-                        <span>{{ word.NameEng.NameEng }}</span>
+                        <span class="word-en">{{ word.NameEng.NameEng }}</span>
                         <span>{{word.Name}} </span>
                     </div>
                     <br>
@@ -84,7 +85,7 @@
                         <!--<p>The associated file is {{ file }}</p>-->
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
                         <a href="#" class="listen" onclick="playAudio('{{file}}');return false;">Listen</a>
-                        <audio id="{{file}}" src="{% static file %}" >Listen</audio>
+                        <audio id="{{file}}" src="{{MEDIA_URL}}{{file}}" >Listen</audio>
                         <!--
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
@@ -109,7 +110,7 @@
                 {% elif lang == 'Russian' %}
                 <li>
                     <div class="details details-up" style="margin-bottom: -4%;">
-                        <span>{{ word.NameEng.NameEng }}</span>
+                        <span class="word-en">{{ word.NameEng.NameEng }}</span>
                         <span>{{word.NameRu}} </span>
                         <span>{{word.NameRoma}} </span>
                     </div>
@@ -119,7 +120,7 @@
                         <!--<p>The associated file is {{ file }}</p>-->
                         <!--<a href="{% static 'learn/audio/jp/hello-jp.mp3' %}" style="color: black;" target="_blank" >Listen</a>-->
                         <a href="#" class="listen" onclick="playAudio('{{file}}');return false;">Listen</a>
-                        <audio id="{{file}}" src="{% static file %}" >Listen</audio>
+                        <audio id="{{file}}" src="{{MEDIA_URL}}{{file}}" >Listen</audio>
                         <!--
                         <form action="/learn/record/" method="post">
                         {% csrf_token %}
