@@ -79,6 +79,7 @@ def print_from_mp3(word, lang, is_from_mic):
         path = MEDIA_DIR+"learn/audio/user.mp3"
         fig_path = MEDIA_DIR+"learn/fig/user.png"
         sound = AudioSegment.from_ogg(path)
+        label = 'You are here'
     else:
         path = MEDIA_DIR+"learn/audio/"+lang+"/"+word+"-"+lang+".mp3"
         if os.path.exists(path):
@@ -95,6 +96,7 @@ def print_from_mp3(word, lang, is_from_mic):
                     sound = b''
 
         fig_path = MEDIA_DIR+"learn/fig/"+lang+"/"+word+"-"+lang+".png"
+        label = 'Reference'
 
 
     #sound = AudioSegment.from_mp3(path)
@@ -114,7 +116,7 @@ def print_from_mp3(word, lang, is_from_mic):
     s.set_ylim(bottom=0.) #Only display positive y-values
     s.set_xticklabels([])
     s.set_yticklabels([])
-    s.set_xlabel('You are here')
+    s.set_xlabel(label)
     fig.savefig(fig_path)
 
 

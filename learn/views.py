@@ -326,7 +326,7 @@ def record(request):
 
         if lang == 'fr':
             word_fr = resp[2]
-            if word_fr in data[0]:
+            if word_fr.lower() in data[0].lower():
                 message = "Congratulations, you pronounced {0} with a score of {1}%".format(word_fr, score)
                 if int(score) >= 80:
                     word_id = Wordfr.objects.get(Name=word_fr).id
@@ -352,7 +352,7 @@ def record(request):
         if lang == 'ru':
             word_ru = resp[2]
             word_roma = resp[3]
-            if (word_ru in data[0]) or (word_roma in data[0]):
+            if (word_ru.lower() in data[0].lower()) or (word_roma.lower() in data[0].lower()):
             #data[1] = 81 #Test
             #if word_in: #Test
                 message = "Congratulations, you pronounced {0} with a score of {1}%".format(word_ru, score)
