@@ -31,19 +31,19 @@ class Word(models.Model):
         return '{0}'.format(self.NameEng)
 
 class Wordjp(models.Model):
-    Phonetics = models.CharField(max_length=20)
-    NameHira = models.CharField(max_length=20)
-    NameKata = models.CharField(max_length=20)
-    NameKanji = models.CharField(max_length=20)
-    NameRoma = models.CharField(max_length=20)
+    Phonetics = models.CharField(max_length=40)
+    NameHira = models.CharField(max_length=40)
+    NameKata = models.CharField(max_length=40)
+    NameKanji = models.CharField(max_length=40)
+    NameRoma = models.CharField(max_length=40)
     NameEng = models.ForeignKey(Word, on_delete=models.CASCADE)
 
     def __str__(self):
         return '{0}'.format(self.NameRoma)
 
 class Wordfr(models.Model):
-    Phonetics = models.CharField(max_length=20)
-    Name = models.CharField(max_length=30)
+    Phonetics = models.CharField(max_length=40)
+    Name = models.CharField(max_length=40)
     NameEng = models.ForeignKey(Word, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -51,9 +51,9 @@ class Wordfr(models.Model):
 
 
 class Wordru(models.Model):
-    Phonetics = models.CharField(max_length=20)
-    NameRu = models.CharField(max_length=20)
-    NameRoma = models.CharField(max_length=20)
+    Phonetics = models.CharField(max_length=40)
+    NameRu = models.CharField(max_length=40)
+    NameRoma = models.CharField(max_length=40)
     NameEng = models.ForeignKey(Word, on_delete=models.CASCADE)
 
     def __str__(self):

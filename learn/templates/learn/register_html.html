@@ -25,15 +25,18 @@
                     </div>
                     <div class="register-field">
                         <label for="password">Password</label>
-                        <input type="password" name="password" method="post" minlength="8" maxlength="20" required>(8 characters minimum)
+                        <input type="password" name="password" method="post" minlength="8" maxlength="20" required>
+                        <br>(8 characters minimum)
                     </div>
                     <div class="register-field">
                         <label for="email">Email</label>
                         <input type="text" name="email" method="post" required>
                     </div>
-                    Display language :<br><br>
-                    <input type="radio" name="lang-display" value="English" method="post" required>English
-                    <!--<input type="radio" name="lang-display" value="French" method="post" required>French-->
+                    <div class="register-field">
+                        Display language :<br><br>
+                        <input type="radio" name="lang-display" value="English" method="post" required>English
+                        <!--<input type="radio" name="lang-display" value="French" method="post" required>French-->
+                    </div>
                     <br><br>
                     <input type="hidden" name="lang" value="{{ lang }}" method="post">
                     <input class="big-button" type="submit" value="Create" method="post">
