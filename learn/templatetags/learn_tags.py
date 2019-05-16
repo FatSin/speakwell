@@ -7,10 +7,11 @@ MEDIA_DIR = 'learn/media/'
 
 def get_type(word, lg):
     if os.path.exists(MEDIA_DIR+'learn/audio/'+lg+'/'+word+'-'+lg+'.mp3'):
-        path = 'learn/audio/' + lg + '/' + word + '-'+lg+'.mp3'
-    else:
-        path = 'learn/audio/' + lg + '/' + word + '-'+lg+'.wav'
-    return path
+        return 'learn/audio/' + lg + '/' + word + '-'+lg+'.mp3'
+    if os.path.exists(MEDIA_DIR + 'learn/audio/' + lg + '/' + word + '-' + lg + '.wav'):
+        return'learn/audio/' + lg + '/' + word + '-'+lg+'.wav'
+    if os.path.exists(MEDIA_DIR + 'learn/audio/' + lg + '/' + word + '-' + lg + '.ogg'):
+        return'learn/audio/' + lg + '/' + word + '-'+lg+'.ogg'
 
 @register.simple_tag
 def getfilejp(word):
