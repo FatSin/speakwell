@@ -1,0 +1,14 @@
+language: python
+python:
+  - '3.6.2'
+
+install:
+  - pip install -r requirements.txt
+
+env: DJANGO_SETTINGS_MODULE="speakwell.settings.travis"
+
+services:
+  - postgresql
+
+script:
+  - ./manage.py test
